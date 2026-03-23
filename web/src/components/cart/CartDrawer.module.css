@@ -170,3 +170,10 @@
   text-transform: uppercase;
   border-radius: 4px;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  .drawer {
+    width: 100%;
+  }
+}

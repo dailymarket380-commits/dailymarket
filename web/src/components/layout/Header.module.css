@@ -158,31 +158,69 @@
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .topHeaderContent {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+  }
+  
+  .logo {
+    font-size: 1.2rem;
   }
   
   .headerActions {
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
     gap: 1rem;
+  }
+  
+  /* Hide the text for these buttons, only show icon */
+  .actionBtn {
+    font-size: 0;
+  }
+  .actionBtn svg {
+    width: 24px;
+    height: 24px;
+    color: black;
+  }
+  
+  .userGreeting {
+    display: none;
+  }
+  .signOutBtn {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.65rem;
   }
   
   .navContainer {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .navLinks {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    width: 100%;
   }
   
   .searchBar {
     width: 100%;
-    margin-top: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+  }
+  
+  /* Make bottom links swipeable like a native app menu tab */
+  .navLinks {
+    display: flex;
+    overflow-x: auto;
+    width: 100%;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    padding-bottom: 0.5rem;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .navLinks::-webkit-scrollbar {
+    display: none;
+  }
+  .navLinks a {
+    white-space: nowrap;
+    font-size: 0.75rem;
   }
 }
 
