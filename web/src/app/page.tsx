@@ -140,9 +140,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Local Merchants Section ── */}
       {localRow.length > 0 && (
-        <section className="container" style={{ marginTop: '4rem', padding: '2rem', background: '#fff7ed', border: '1.5px solid #fed7aa', borderRadius: '12px' }}>
+        <section className={`container ${styles.localSection}`}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
             <div>
               <h2 className={styles.sectionTitle} style={{ margin: 0, color: '#c2410c', textAlign: 'left' }}>🇿🇦 NEW FROM LOCAL MERCHANTS</h2>
@@ -169,9 +168,8 @@ export default async function Home() {
         </section>
       )}
 
-      {/* ── Gourmet Selection (Market Anatolia, etc.) ── */}
       {trendingRow.length > 0 && (
-        <section className="container" style={{ marginTop: '3rem', padding: '3rem', background: '#f9f9f9', border: '1px solid #eee', borderRadius: '4px', position: 'relative', overflow: 'hidden' }}>
+        <section className={`container ${styles.gourmetSection}`}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem', borderBottom: '1px solid #1a1a1a', paddingBottom: '1rem' }}>
             <div>
               <h2 className={styles.sectionTitle} style={{ margin: 0, color: 'black', letterSpacing: '2px', textAlign: 'left', fontSize: '1.5rem' }}>GOURMET SELECTIONS</h2>

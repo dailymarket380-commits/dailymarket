@@ -395,21 +395,58 @@
 
 @media (max-width: 768px) {
   .heroContent { flex-direction: column; min-height: auto; align-items: stretch; padding: 1rem; padding-top: 0; }
-  .heroImage { position: relative; width: 100%; height: 400px; order: 1; border-radius: 12px; overflow: hidden; margin-bottom: -150px; }
-  .heroTextContainer { padding: 2rem; width: calc(100% - 2rem); max-width: none; transform: none; aspect-ratio: auto; order: 2; margin: 0 auto; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-  .heroTitle { font-size: 2.5rem; }
+  .heroImage { position: relative; width: 100%; height: 280px; order: 1; border-radius: 12px; overflow: hidden; margin-bottom: -100px; }
+  .heroTextContainer { padding: 1.5rem; width: calc(100% - 2rem); max-width: none; transform: none; aspect-ratio: auto; order: 2; margin: 0 auto; border-radius: 16px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+  .heroTitle { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .heroSubtitle { font-size: 0.8rem; margin-bottom: 1.5rem; }
+  .heroBtn { padding: 0.75rem 1.5rem; font-size: 0.75rem; }
   
-  .featureGrid { grid-template-columns: 1fr; }
+  /* Make Feature Cards Swipeable like an App */
+  .featureGrid { 
+    display: flex; 
+    overflow-x: auto; 
+    gap: 1rem; 
+    padding-bottom: 1rem; 
+    scroll-snap-type: x mandatory;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .featureGrid::-webkit-scrollbar { display: none; }
+  .featureCard { 
+    flex: 0 0 calc(75% - 1rem); 
+    scroll-snap-align: center; 
+    border-radius: 12px;
+    height: 280px;
+  }
+  .featureOverlay { padding: 1rem; margin: 0 0.75rem 0.75rem; }
+  .featureOverlay h3 { font-size: 0.9rem; }
+  
   .categoryGrid { grid-template-columns: repeat(2, 1fr); }
-  .promoGrid { grid-template-columns: 1fr; }
+  
+  /* Promos Swipeable */
+  .promoGrid { 
+    display: flex; 
+    overflow-x: auto; 
+    gap: 1rem; 
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .promoGrid::-webkit-scrollbar { display: none; }
+  .promoCard { flex: 0 0 85%; scroll-snap-align: center; padding: 1.5rem; aspect-ratio: auto; min-height: 140px; }
+  .promoCard h3 { font-size: 1.2rem; }
   
   .sectionTitle { font-size: 1.2rem; margin-bottom: 1rem; }
   
-  .qualityText { padding: 2rem 1rem; }
-  .qualityText h2 { font-size: 2rem; }
+  .qualityText { padding: 1.5rem 1rem; }
+  .qualityText h2 { font-size: 1.5rem; }
+  .qualityText p { font-size: 0.85rem; }
+  .qualityImage { height: 200px; }
   
-  .valueContent { padding: 2rem 1rem; }
-  .valueContent h2 { font-size: 2rem; }
+  .valueContent { padding: 1.5rem 1rem; }
+  .valueContent h2 { font-size: 1.5rem; }
+  .valueContent p { font-size: 0.85rem; }
+  .valueImage { height: 200px; }
+  .valueBanner { min-height: auto; margin-top: 2rem; }
 }
 
 .productGrid {
@@ -453,3 +490,34 @@
   }
 }
 
+/* Dedicated section styles for responsiveness */
+.localSection {
+  margin-top: 4rem;
+  padding: 2rem;
+  background: #fff7ed;
+  border: 1.5px solid #fed7aa;
+  border-radius: 12px;
+}
+
+.gourmetSection {
+  margin-top: 3rem;
+  padding: 3rem;
+  background: #fcfcfc;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .localSection {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  .gourmetSection {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+}
