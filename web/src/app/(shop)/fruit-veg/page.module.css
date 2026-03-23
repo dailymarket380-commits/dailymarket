@@ -1,0 +1,240 @@
+.listingLayout {
+  display: flex;
+  gap: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+}
+
+.filterSection {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+}
+
+.filterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggleLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary-text);
+  letter-spacing: 0.5px;
+}
+
+.toggleSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: var(--hover-border);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggleSwitch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.filterGroup {
+  margin-bottom: 1.5rem;
+}
+
+.filterTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary-text);
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+
+.minusIcon {
+  font-size: 1.25rem;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.filterList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.filterList a {
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+}
+
+.filterList a:hover {
+  text-decoration: underline;
+}
+
+.activeLink {
+  color: var(--primary-text) !important;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+/* Main Content Styles */
+.mainContent {
+  flex: 1;
+}
+
+.headerTools {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-text);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.itemCount {
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.viewToggles {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.viewBtn {
+  color: var(--hover-border);
+  padding: 4px;
+}
+
+.activeView {
+  color: var(--primary-text);
+}
+
+.sortSelect {
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: var(--primary-text);
+  background-color: var(--surface);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1em;
+  font-family: inherit;
+}
+
+.categoryPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.pill {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  font-size: 0.875rem;
+  color: var(--primary-text);
+  background: var(--surface);
+  transition: all var(--transition-fast);
+}
+
+.pill:hover {
+  border-color: var(--primary-text);
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .listingLayout {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    display: none; /* In a real app, this would be hidden behind a 'Filter' button */
+  }
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .headerTools {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .toolbar {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .gridContainer {
+    grid-template-columns: 1fr;
+  }
+}

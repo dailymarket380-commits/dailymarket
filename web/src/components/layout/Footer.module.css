@@ -1,0 +1,173 @@
+.footer {
+  background-color: #1a1a1a;
+  color: rgba(255,255,255,0.75);
+  margin-top: 4rem;
+}
+
+/* ── Trust Bar (B.L.A.S.T - Believe) ── */
+.trustBar {
+  background: white;
+  border-top: 3px solid #f97316;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 1.5rem 0;
+}
+
+.trustGrid {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.trustItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 160px;
+}
+
+.trustIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.trustItem strong {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.trustItem span {
+  font-size: 0.7rem;
+  color: #888;
+  line-height: 1.4;
+}
+
+/* Main footer body */
+.footer > div:last-child {
+  padding: 4rem 0 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.column h3 {
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  color: white;
+  letter-spacing: 0.1em;
+}
+
+.column ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.column a {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.column a:hover {
+  color: #f97316;
+}
+
+.column p {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.socialRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  font-size: 1.3rem;
+}
+
+.socialRow a {
+  text-decoration: none;
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+.socialRow a:hover {
+  transform: scale(1.2);
+}
+
+.newsletterForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.newsletterForm input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--primary-text);
+}
+
+.newsletterForm button {
+  background-color: var(--primary-text);
+  color: var(--background);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.newsletterForm button:hover {
+  background-color: var(--secondary-text);
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--faded-text);
+  font-size: 0.75rem;
+}
+
+.legal {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.legal a:hover {
+  color: var(--primary-text);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}

@@ -1,0 +1,172 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.drawer {
+  width: 450px;
+  height: 100%;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
+  font-size: 1.25rem;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.shopBtn {
+  margin-top: 1rem;
+  background: black;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-weight: 800;
+  border-radius: 4px;
+}
+
+.item {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+  position: relative;
+}
+
+.itemImage {
+  width: 100px;
+  height: 100px;
+  background: #f9f9f9;
+}
+
+.itemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.itemInfo h3 {
+  font-size: 0.9rem;
+  margin: 0 0 0.25rem;
+  text-transform: none;
+  font-weight: 700;
+}
+
+.vendor {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.price {
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.quantity {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--border-medium);
+  width: fit-content;
+  padding: 0.25rem;
+}
+
+.quantity button {
+  background: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.remove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.remove svg {
+  width: 16px;
+  height: 16px;
+}
+
+.footer {
+  padding: 2rem;
+  border-top: 1px solid var(--border-light);
+  background: #fafafa;
+}
+
+.subtotal {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 900;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.taxNote {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.checkoutBtn {
+  display: block;
+  background: black;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  border-radius: 4px;
+}

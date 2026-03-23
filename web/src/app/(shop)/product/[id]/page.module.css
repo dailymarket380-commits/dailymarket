@@ -1,0 +1,241 @@
+.detailLayout {
+  padding-top: 1rem;
+  padding-bottom: 4rem;
+}
+
+.breadcrumbs {
+  font-size: 0.8rem;
+  color: var(--secondary-text);
+  margin-bottom: 2rem;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.mainContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+}
+
+.imageGallery {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mainImageContainer {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--surface-hover);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mainImage {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 1rem;
+}
+
+.thumbnail, .thumbnailActive {
+  width: 80px;
+  height: 80px;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.thumbnailActive {
+  border-color: var(--primary-text);
+}
+
+.thumbnail img, .thumbnailActive img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--secondary-text);
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--primary-text);
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stars {
+  display: flex;
+}
+
+.starFilled {
+  width: 16px;
+  height: 16px;
+  color: var(--primary-text);
+}
+
+.starEmpty {
+  width: 16px;
+  height: 16px;
+  color: var(--hover-border);
+}
+
+.reviewText {
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+  text-decoration: underline;
+}
+
+.priceBox {
+  margin-bottom: 2rem;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-text);
+}
+
+.unitPrice {
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+}
+
+.purchaseControls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.quantitySelector {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.quantitySelector button {
+  padding: 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.quantitySelector input {
+  width: 50px;
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+}
+
+.stockAvailability {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent-green);
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+}
+
+.stockAvailability svg {
+  width: 18px;
+  height: 18px;
+}
+
+.description {
+  margin-bottom: 2rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 2rem;
+}
+
+.description h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.description p {
+  color: var(--secondary-text);
+  line-height: 1.6;
+}
+
+.detailsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detailItem {
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+}
+
+.nutritionalSection {
+  border-top: 1px solid var(--border-color);
+  padding-top: 4rem;
+}
+
+.nutritionalSection h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+
+.nutriTable {
+  width: 100%;
+  max-width: 600px;
+  border-collapse: collapse;
+}
+
+.nutriTable tr {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nutriTable td {
+  padding: 1rem 0;
+  font-size: 0.875rem;
+}
+
+.nutriTable td:last-child {
+  text-align: right;
+  font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

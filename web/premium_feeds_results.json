@@ -1,0 +1,72 @@
+[
+  {
+    "url": "https://goodfoodmerchant.com/products.json",
+    "status": "FAILED",
+    "code": 404
+  },
+  {
+    "url": "https://chegourmet.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "Binggrae BTS Strawberry Milk 200ML",
+    "image": "https://cdn.shopify.com/s/files/1/0656/0284/6772/files/Product-212-1.jpg?v=1749218900"
+  },
+  {
+    "url": "https://meat-tradersonline.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "FROZEN FRENCH FRIES - 2.5KG",
+    "image": "https://cdn.shopify.com/s/files/1/0703/3847/8333/files/FROZENCHIPS.png?v=1773246281"
+  },
+  {
+    "url": "https://kalaharionlinebutchery.co.za/products.json",
+    "status": "FAILED",
+    "code": 404
+  },
+  {
+    "url": "https://meatcart.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "Wagyu Tomahawk (900-1.1kg)",
+    "image": "https://cdn.shopify.com/s/files/1/0420/9514/9214/products/AmericanWagyu_Product_TomahawkChop__81295.jpg?v=1658831291"
+  },
+  {
+    "url": "https://artisanalafrica.co.za/products.json",
+    "status": "FAILED",
+    "code": 404
+  },
+  {
+    "url": "https://artisanfood.co.za/products.json",
+    "status": "FAILED",
+    "code": 404
+  },
+  {
+    "url": "https://savouryboutique.com/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "Tuscan Chicken and Mushroom Samoosa (12 Pack) | Student & Pensioner Pricing",
+    "image": "https://cdn.shopify.com/s/files/1/2399/2021/products/JBP6919_1cfda61e-1178-441c-8a4e-7286023f50e1.jpg?v=1632219395"
+  },
+  {
+    "url": "https://dinnerbox.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "Everyday Box - Seasons Medley 2.0 - All-in",
+    "image": "https://cdn.shopify.com/s/files/1/0344/8425/6906/files/DB-SM25_2-AllIn-1_57b1ff2f-f5b2-4937-a295-517d742503be.webp?v=1737380310"
+  },
+  {
+    "url": "https://frozenforyou.co.za/products.json",
+    "status": "FAILED",
+    "code": 404
+  },
+  {
+    "url": "https://tiptopmeat.co.za/products.json",
+    "status": "FAILED",
+    "code": 404
+  },
+  {
+    "url": "https://thecharcuterie.co.za/products.json",
+    "status": "ERROR",
+    "error": "fetch failed"
+  }
+]

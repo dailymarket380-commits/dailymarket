@@ -1,0 +1,59 @@
+[
+  {
+    "url": "https://marketanatolia.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "Eti Topkek Chocolate Cake 35g*24",
+    "image": "https://cdn.shopify.com/s/files/1/0516/0350/5309/files/images_17832f87-e52a-48ad-9d32-8b3e73626677.jpg?v=1761945545"
+  },
+  {
+    "url": "https://sweetieshop.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "BOLCI Dubai Chocolate Gift Tin 200g",
+    "image": "https://cdn.shopify.com/s/files/1/0492/6462/3766/files/IMG-20260124-WA0047.jpg?v=1772330498"
+  },
+  {
+    "url": "https://thecandybar.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "Kinder Bueno Mini 108g",
+    "image": "https://cdn.shopify.com/s/files/1/0892/1527/1283/files/IMG-5768.jpg?v=1773401907"
+  },
+  {
+    "url": "https://houseofcandy.co.za/products.json",
+    "status": "FAILED",
+    "code": 404
+  },
+  {
+    "url": "https://sweetcity.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "Bolci Roche Milk Chocolate Raisin & Hazelnut 80g",
+    "image": "https://cdn.shopify.com/s/files/1/0292/7394/8265/files/BolciRocheMilkChocolateRaisin_Hazelnut80g.webp?v=1773406687"
+  },
+  {
+    "url": "https://sabiltong.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 16,
+    "sample": "Chutney Beef Sticks",
+    "image": "https://cdn.shopify.com/s/files/1/0721/6614/6215/files/CHILLIBITES01.jpg?v=1771051429"
+  },
+  {
+    "url": "https://biltongboytjies.co.za/products.json",
+    "status": "SUCCESS",
+    "count": 30,
+    "sample": "FLASH SALE: Boytjies A/B Grade Original Biltong",
+    "image": "https://cdn.shopify.com/s/files/1/0549/2542/6749/files/FLASHSALEOriginalBiltong_AB_d874ddf7-6a68-4e4f-94ee-c22f32ad0cef.gif?v=1710151495"
+  },
+  {
+    "url": "https://snackbox.co.za/products.json",
+    "status": "FAILED",
+    "code": 404
+  },
+  {
+    "url": "https://thesnackking.co.za/products.json",
+    "status": "ERROR",
+    "error": "fetch failed"
+  }
+]

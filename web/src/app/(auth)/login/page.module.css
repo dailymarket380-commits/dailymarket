@@ -1,0 +1,150 @@
+.authContainer {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  background-color: #f9f9f9;
+}
+
+.authBox {
+  width: 100%;
+  max-width: 460px;
+  background: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.authIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* Checkout reminder banner */
+.checkoutBanner {
+  background: #fff7ed;
+  border: 1.5px solid #fed7aa;
+  color: #c2410c;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.checkoutBanner strong {
+  display: block;
+  margin-bottom: 2px;
+  font-weight: 900;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.inputGroup label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  letter-spacing: 0.08em;
+}
+
+.inputGroup input {
+  padding: 0.85rem 1rem;
+  border: 1.5px solid #e5e5e5;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.inputGroup input:focus {
+  border-color: var(--brand-orange);
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+}
+
+.submitBtn {
+  width: 100%;
+  background: #1a1a1a;
+  color: white;
+  padding: 1rem;
+  font-size: 0.95rem;
+  font-weight: 900;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--brand-orange);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.success {
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.switchAuth {
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.switchAuth a {
+  color: var(--brand-orange);
+  font-weight: 700;
+}
+

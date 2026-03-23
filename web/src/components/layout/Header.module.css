@@ -1,0 +1,156 @@
+.header {
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+}
+
+.topHeader {
+  border-bottom: 1px solid var(--border-light);
+  padding: 1rem 0;
+}
+
+.topHeaderContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: black;
+  letter-spacing: 0.2em; /* Elite spacing */
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: none;
+}
+
+.actionBtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.actionBtn:hover {
+  color: var(--brand-orange);
+}
+
+/* ── User Auth Menu ── */
+.userMenu {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.userGreeting {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.signOutBtn {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--accent-red);
+  background: none;
+  border: 1px solid var(--accent-red);
+  border-radius: 4px;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+}
+
+.signOutBtn:hover {
+  background: var(--accent-red);
+  color: white;
+}
+
+
+.cartBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cartBtn svg {
+  width: 24px;
+  height: 24px;
+  color: black;
+}
+
+.bottomHeader {
+  padding: 0.75rem 0;
+}
+
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navLinks a {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navLinks a:hover {
+  color: var(--accent-gold);
+}
+
+.navLinks a svg {
+  width: 14px;
+  height: 14px;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background: #fcfcfc;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  width: 300px;
+}
+
+.searchBar svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  margin-right: 0.75rem;
+}
+
+.searchBar input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 0.9rem;
+  outline: none;
+  font-family: inherit;
+}

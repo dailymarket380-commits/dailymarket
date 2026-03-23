@@ -1,0 +1,51 @@
+.shopContainer {
+  padding: 4rem 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.categoryCard {
+  border: 1px solid var(--border-color);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: var(--primary-text);
+  transition: all var(--transition-fast);
+  background: var(--surface);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.categoryCard:hover {
+  border-color: var(--primary-text);
+  background-color: var(--surface-hover);
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 1024px) {
+  .categoryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .categoryGrid {
+    grid-template-columns: 1fr;
+  }
+}
