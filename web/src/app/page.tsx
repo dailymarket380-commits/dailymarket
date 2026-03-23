@@ -148,7 +148,7 @@ export default async function Home() {
             </div>
             <Link href="/shop" style={{ fontSize: '0.8rem', fontWeight: 800, color: '#f97316', textDecoration: 'none', border: '1.5px solid #f97316', padding: '8px 16px', borderRadius: '6px' }}>EXPLORE ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {localRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -177,7 +177,7 @@ export default async function Home() {
             </div>
             <Link href="/shop?category=sweets" style={{ fontSize: '0.75rem', fontWeight: 900, textDecoration: 'none', color: 'white', background: 'black', padding: '0.6rem 1.5rem', borderRadius: '2px', textTransform: 'uppercase' }}>EXPLORE ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem' }}>
+          <div className={styles.productGrid}>
             {trendingRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -203,7 +203,7 @@ export default async function Home() {
             <h2 className={styles.sectionTitle} style={{ margin: 0, textAlign: 'left' }}>🇿🇦 BEST SELLING BILTONG</h2>
             <Link href="/shop?category=meat-poultry" style={{ fontSize: '0.8rem', fontWeight: 800, textDecoration: 'underline' }}>VIEW ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {biltongRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -230,7 +230,7 @@ export default async function Home() {
             <h2 className={styles.sectionTitle} style={{ margin: 0 }}>🥦 FRUIT & VEGETABLES</h2>
             <Link href="/shop?category=fruit-veg" style={{ fontSize: '0.8rem', fontWeight: 800, textDecoration: 'underline' }}>VIEW ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {vegRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -256,7 +256,7 @@ export default async function Home() {
             <h2 className={styles.sectionTitle} style={{ margin: 0 }}>🥤 BEVERAGES & JUICE</h2>
             <Link href="/shop?category=beverages" style={{ fontSize: '0.8rem', fontWeight: 800, textDecoration: 'underline' }}>VIEW ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {beverageRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -281,7 +281,7 @@ export default async function Home() {
             <h2 className={styles.sectionTitle} style={{ margin: 0 }}>🧼 HOUSEHOLD & PERSONAL CARE</h2>
             <Link href="/shop?category=household-care" style={{ fontSize: '0.8rem', fontWeight: 800, textDecoration: 'underline' }}>VIEW ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {householdRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -306,7 +306,7 @@ export default async function Home() {
             <h2 className={styles.sectionTitle} style={{ margin: 0 }}>🛒 PANTRY SHOP</h2>
             <Link href="/shop?category=pantry" style={{ fontSize: '0.8rem', fontWeight: 800, textDecoration: 'underline' }}>VIEW ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {pantryRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -331,7 +331,7 @@ export default async function Home() {
             <h2 className={styles.sectionTitle} style={{ margin: 0 }}>🧁 BAKERY & PREPARED MEALS</h2>
             <Link href="/shop?category=bakery" style={{ fontSize: '0.8rem', fontWeight: 800, textDecoration: 'underline' }}>VIEW ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {bakeryRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -356,7 +356,7 @@ export default async function Home() {
             <h2 className={styles.sectionTitle} style={{ margin: 0 }}>🥩 MEAT & POULTRY</h2>
             <Link href="/shop?category=meat-poultry" style={{ fontSize: '0.8rem', fontWeight: 800, textDecoration: 'underline' }}>VIEW ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {meatRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -381,7 +381,7 @@ export default async function Home() {
             <h2 className={styles.sectionTitle} style={{ margin: 0 }}>🍫 SWEETS & SNACKS</h2>
             <Link href="/shop?category=sweets" style={{ fontSize: '0.8rem', fontWeight: 800, textDecoration: 'underline' }}>VIEW ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {sweetsRow.map(p => (
               <ProductCard 
                 key={p.id} 
@@ -419,7 +419,7 @@ export default async function Home() {
             <h2 className={styles.sectionTitle} style={{ margin: 0 }}>🥛 CHILLED & DAIRY</h2>
             <Link href="/shop?category=dairy" style={{ fontSize: '0.8rem', fontWeight: 800, textDecoration: 'underline' }}>VIEW ALL</Link>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }}>
+          <div className={styles.productGrid}>
             {dairyRow.map(p => (
               <ProductCard 
                 key={p.id} 

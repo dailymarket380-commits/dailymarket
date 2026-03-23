@@ -220,7 +220,7 @@
     display: none; /* In a real app, this would be hidden behind a 'Filter' button */
   }
   .gridContainer {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
   .headerTools {
     flex-direction: column;
@@ -233,8 +233,12 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .gridContainer {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .listingLayout {
+    padding-top: 1rem;
   }
 }
