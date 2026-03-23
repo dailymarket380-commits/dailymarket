@@ -1,19 +1,19 @@
 .card {
   background: white;
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
+  border: none;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
   position: relative;
   height: 100%;
   overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.10);
-  border-color: #e0e0e0;
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
 }
 
 .linkWrapper {
@@ -29,7 +29,7 @@
   position: relative;
   aspect-ratio: 1;
   width: 100%;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   overflow: hidden;
 }
 
@@ -41,7 +41,7 @@
 }
 
 .card:hover .image {
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 /* ── Content ── */
@@ -54,10 +54,10 @@
 }
 
 .vendor {
-  font-size: 0.6rem;
-  font-weight: 900;
-  color: var(--brand-orange);
-  letter-spacing: 0.1em;
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: #888888;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
 }
 
@@ -107,11 +107,11 @@
 
 /* ── Footer Row ── */
 .footerRow {
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1rem 1rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #f5f5f5;
+  border-top: 1px solid rgba(0,0,0,0.03);
 }
 
 .priceInfo {
@@ -121,10 +121,10 @@
 }
 
 .price {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 900;
   color: #1a1a1a;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
   line-height: 1;
 }
 
@@ -145,9 +145,9 @@
 .addBtn {
   background: #1a1a1a;
   color: white;
-  width: 38px;
-  height: 38px;
-  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   border: none;
   cursor: pointer;
   display: flex;
@@ -156,6 +156,7 @@
   padding: 0;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .addBtn:hover {
@@ -179,13 +180,14 @@
   top: 10px;
   left: 10px;
   z-index: 2;
-  padding: 0.25rem 0.6rem;
+  padding: 0.35rem 0.75rem;
   font-size: 0.55rem;
   font-weight: 900;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 3px;
+  letter-spacing: 0.1em;
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .badgeSave {
@@ -210,17 +212,19 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(22, 163, 74, 0.95);
+  background: rgba(26, 26, 26, 0.85);
+  backdrop-filter: blur(8px);
   color: white;
   font-size: 0.8rem;
   font-weight: 800;
-  padding: 0.6rem 1.2rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 50px;
   z-index: 10;
   pointer-events: none;
   white-space: nowrap;
   animation: toastPop 0.2s ease-out forwards;
   letter-spacing: 0.05em;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
 @keyframes toastPop {
@@ -260,9 +264,9 @@
     font-size: 0.55rem;
   }
   .addBtn {
-    width: 30px;
-    height: 30px;
-    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
   }
   .addBtn svg {
     width: 14px;
