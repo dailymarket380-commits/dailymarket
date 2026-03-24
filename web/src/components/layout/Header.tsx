@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import CartDrawer from '../cart/CartDrawer';
@@ -12,8 +13,11 @@ export default function Header() {
   const { totalItems, isCartOpen, setIsCartOpen } = useCart();
   const { user, loading, signOut } = useAuth();
 
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${isHomePage ? styles.homeHeader : ''}`}>
       {/* Top Header */}
       <div className={styles.topHeader}>
         <div className="container">

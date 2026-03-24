@@ -1,3 +1,164 @@
+.uberMobileHeader {
+  display: none;
+  background: white;
+  padding: 1rem 1rem 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.topBar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.deliveryToggle {
+  display: flex;
+  background: #eee;
+  padding: 4px;
+  border-radius: 50px;
+  width: fit-content;
+}
+
+.toggleBtn, .toggleBtnActive {
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggleBtn {
+  background: transparent;
+  color: #555;
+}
+
+.toggleBtnActive {
+  background: white;
+  color: black;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.addressBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.addressInfo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.addressLabel {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.addressText {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #1a1a1a;
+}
+
+.chevronIcon {
+  width: 20px;
+  height: 20px;
+  color: black;
+}
+
+.uberCategoryGrid {
+  display: none;
+  padding: 1.5rem 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  background: white;
+}
+
+.uberCategoryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.uberCategoryIcon {
+  width: 70px;
+  height: 70px;
+  background: #f6f6f6;
+  border-radius: 12px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.uberCategoryIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.uberCategoryLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-transform: capitalize;
+}
+
+.filterScroll {
+  display: none;
+  overflow-x: auto;
+  gap: 0.75rem;
+  padding: 0 1rem 1rem;
+  background: white;
+  scrollbar-width: none;
+}
+
+.filterScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.filterChip {
+  background: #eee;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: black;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    display: none;
+  }
+  .uberMobileHeader {
+    display: block;
+  }
+  .uberCategoryGrid {
+    display: grid;
+  }
+  .filterScroll {
+    display: flex;
+  }
+  .mainContent {
+    padding-top: 0;
+  }
+}
+
 .main {
   background: white;
 }
@@ -409,12 +570,21 @@
 }
 
 @media (max-width: 768px) {
-  .heroContent { flex-direction: column; min-height: auto; align-items: stretch; padding: 1rem; padding-top: 0; }
-  .heroImage { position: relative; width: 100%; height: 280px; order: 1; border-radius: 16px; overflow: hidden; margin-bottom: -110px; }
-  .heroTextContainer { padding: 2.5rem 1.5rem; width: calc(100% - 2rem); max-width: none; transform: none; aspect-ratio: auto; order: 2; margin: 0 auto; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
-  .heroTitle { font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -1px; line-height: 1.1; }
-  .heroSubtitle { font-size: 0.8rem; margin-bottom: 2rem; opacity: 0.9; }
-  .heroBtn { padding: 0.9rem 2rem; font-size: 0.8rem; }
+  .heroSection {
+    display: none;
+  }
+  .uberMobileHeader {
+    display: block;
+  }
+  .uberCategoryGrid {
+    display: grid;
+  }
+  .filterScroll {
+    display: flex;
+  }
+  .mainContent {
+    padding-top: 0;
+  }
   
   .featureGrid { 
     display: flex; 
@@ -425,6 +595,7 @@
     scroll-snap-type: x mandatory;
     -ms-overflow-style: none; scrollbar-width: none;
   }
+  .featureGrid::-webkit-scrollbar { display: none; }
   .featureCard { 
     flex: 0 0 65%; 
     scroll-snap-align: start; 
@@ -438,10 +609,9 @@
     border-radius: 12px;
   }
   .featureOverlay h3 { font-size: 0.85rem; letter-spacing: 0.5px; }
-}  
+  
   .categoryGrid { grid-template-columns: repeat(2, 1fr); }
   
-  /* Promos Swipeable */
   .promoGrid { 
     display: flex; 
     overflow-x: auto; 
@@ -466,6 +636,35 @@
   .valueContent p { font-size: 0.85rem; }
   .valueImage { height: 200px; }
   .valueBanner { min-height: auto; margin-top: 2rem; }
+
+  .productGrid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .productGrid::-webkit-scrollbar {
+    display: none;
+  }
+  .productGrid > * {
+    scroll-snap-align: start;
+    flex: 0 0 calc(50% - 0.5rem); 
+    min-width: 140px;
+  }
+
+  .localSection {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  .gourmetSection {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+  }
 }
 
 .productGrid {
@@ -480,36 +679,13 @@
   }
 }
 
-/* On mobile, use horizontal swipe carousels exactly like the Woolworths app to avoid looking clustered */
-@media (max-width: 768px) {
-  .productGrid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 1rem;
-    padding-bottom: 1rem;
-    /* Hide scrollbar for a clean native app look */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .productGrid::-webkit-scrollbar {
-    display: none;
-  }
-  .productGrid > * {
-    scroll-snap-align: start;
-    flex: 0 0 calc(50% - 0.5rem); /* show 2 items, and a peek of the next */
-    min-width: 140px;
-  }
-}
-
 @media (max-width: 480px) {
   .productGrid > * {
-    flex: 0 0 calc(60% - 0.5rem); /* show 1.5 items (one full, one peeking) */
+    flex: 0 0 calc(60% - 0.5rem);
     min-width: 160px;
   }
 }
 
-/* Dedicated section styles for responsiveness */
 .localSection {
   margin-top: 4rem;
   padding: 2rem;
@@ -528,15 +704,3 @@
   overflow: hidden;
 }
 
-@media (max-width: 768px) {
-  .localSection {
-    margin-top: 2rem;
-    padding: 1rem;
-    border-radius: 8px;
-  }
-  .gourmetSection {
-    margin-top: 2rem;
-    padding: 1rem;
-    border-radius: 8px;
-  }
-}

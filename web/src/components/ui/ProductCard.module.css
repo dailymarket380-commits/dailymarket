@@ -232,51 +232,61 @@
   to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
-/* Mobile App Styling */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .card {
-    border-radius: 6px;
+    border-radius: 12px;
+    box-shadow: none;
+    border: 1px solid #f0f0f0;
+  }
+  .imageContainer {
+    border-radius: 12px 12px 0 0;
   }
   .content {
-    padding: 0.5rem;
-    gap: 0.2rem;
+    padding: 0.75rem;
+    gap: 0.25rem;
   }
   .title {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 700;
     line-height: 1.2;
+    color: #000;
   }
   .vendor {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
+    color: #555;
+    margin-bottom: 2px;
   }
   .ratingBox {
-    padding-top: 0.2rem;
+    padding-top: 0.15rem;
   }
   .footerRow {
-    padding: 0.5rem;
+    padding: 0 0.75rem 0.75rem;
+    border-top: none;
+    align-items: flex-end;
   }
   .price {
-    font-size: 1rem;
-  }
-  .originalPrice {
-    font-size: 0.65rem;
+    font-size: 1.15rem;
+    font-weight: 800;
   }
   .unit {
-    font-size: 0.55rem;
+    font-size: 0.65rem;
+    font-weight: 600;
   }
   .addBtn {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    background: #000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
-  .addBtn svg {
-    width: 14px;
-    height: 14px;
+  .addBtnSuccess {
+    background: #05a357 !important; /* Uber Green */
   }
   .badge {
-    padding: 0.2rem 0.4rem;
-    font-size: 0.5rem;
-    top: 6px;
-    left: 6px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.55rem;
+    border-radius: 4px; /* Uber style labels are often rectangular or slightly rounded */
+    top: 8px;
+    left: 8px;
   }
 }
 

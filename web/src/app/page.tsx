@@ -79,7 +79,67 @@ export default async function Home() {
 
   return (
     <>
-      {/* ── Hero ── */}
+      {/* ── Uber Eats Style Mobile Header ── */}
+      <section className={styles.uberMobileHeader}>
+        <div className={styles.topBar}>
+          <div className={styles.deliveryToggle}>
+            <button className={styles.toggleBtnActive}>Delivery</button>
+            <button className={styles.toggleBtn}>Pickup</button>
+          </div>
+        </div>
+        <div className={styles.addressBar}>
+          <div className={styles.addressInfo}>
+            <span className={styles.addressLabel}>Now • </span>
+            <span className={styles.addressText}>Enter Delivery Address</span>
+          </div>
+          <svg className={styles.chevronIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </section>
+
+      {/* ── Uber Eats Style Category Chips ── */}
+      <section className={styles.uberCategoryGrid}>
+        {CATEGORIES.map(c => (
+          <Link key={c.cat} href={`/shop?category=${c.cat}`} className={styles.uberCategoryCard}>
+            <div className={styles.uberCategoryIcon}>
+              <img src={c.photo} alt={c.label} />
+            </div>
+            <span className={styles.uberCategoryLabel}>{c.label.split(' ')[0]}</span>
+          </Link>
+        ))}
+      </section>
+
+      {/* ── Filter Chips ── */}
+      <section className={styles.filterScroll}>
+        <button className={styles.filterChip}>Sort <svg viewBox="0 0 24 24" height="12" width="12" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+        <button className={styles.filterChip}>Price <svg viewBox="0 0 24 24" height="12" width="12" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+        <button className={styles.filterChip}>Rating</button>
+        <button className={styles.filterChip}>Dietary</button>
+      </section>
+
+      {/* ── Buy It Again (Easier Usage) ── */}
+      {localRow.length > 0 && (
+        <section className="container" style={{ marginTop: '1rem', display: 'block' }}>
+          <h2 className={styles.sectionTitle} style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Buy it Again</h2>
+          <div className={styles.productGrid}>
+            {localRow.slice(0, 3).map(p => (
+              <ProductCard 
+                key={`re-${p.id}`} 
+                id={p.id} 
+                title={p.title} 
+                price={p.premium_price} 
+                imageUrl={p.image_url} 
+                unit={p.unit} 
+                rating={p.rating} 
+                reviewCount={p.reviewCount} 
+                vendorName={p.vendor_name}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+
+      {/* ── Original Hero (Desktop Only) ── */}
       <section className={styles.heroSection}>
         <div className="container">
           <div className={styles.heroContent}>
@@ -122,23 +182,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Modern App Category Scroll ── */}
-      <section className="container" style={{ marginTop: '1rem', marginBottom: '1.5rem' }}>
-        <div className={styles.categoryScroll}>
-          {CATEGORIES.map(c => (
-            <Link 
-              key={c.cat} 
-              href={`/shop?category=${c.cat}`}
-              className={styles.categoryAppCard}
-            >
-              <div className={styles.categoryIcon}>
-                <img src={c.photo} alt={c.label} style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%'}} />
-              </div>
-              <span className={styles.categoryText}>{c.label}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
 
       {localRow.length > 0 && (
         <section className={`container ${styles.localSection}`}>

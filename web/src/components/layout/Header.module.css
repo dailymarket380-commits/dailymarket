@@ -6,6 +6,12 @@
   box-shadow: var(--shadow);
 }
 
+@media (max-width: 768px) {
+  .homeHeader {
+    display: none !important;
+  }
+}
+
 .topHeader {
   border-bottom: 1px solid var(--border-light);
   padding: 1rem 0;
