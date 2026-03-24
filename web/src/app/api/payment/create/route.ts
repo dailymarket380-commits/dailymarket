@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { supabase } from '@/lib/supabase'; // Updated to use real Supabase client for database operations
 
 /**
  * POST /api/payment/create
  * 
- * Accepts cart + shipping details from the checkout page,
- * builds a signed PayFast payment request, and returns the
- * PayFast URL + form data for the client to POST to.
- * 
- * PayFast Docs: https://developers.payfast.co.za/docs
+ * 1. Creates a 'pending' order in Supabase
+ * 2. Builds a signed PayFast payment request with the Order UUID
+ * 3. Returns PayFast URL + form data
  */
 
 const PAYFAST_SANDBOX = process.env.PAYFAST_SANDBOX === 'true';
@@ -17,7 +16,6 @@ const PAYFAST_URL = PAYFAST_SANDBOX
   : 'https://www.payfast.co.za/eng/process';
 
 function buildSignature(data: Record<string, string>, passphrase: string): string {
-  // Build param string (alphabetical order, URL-encoded)
   const paramString = Object.keys(data)
     .sort()
     .map(key => `${key}=${encodeURIComponent(data[key]).replace(/%20/g, '+')}`)
@@ -39,15 +37,43 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
     }
 
+    // 1. Create the Pending Order in Supabase
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .insert({
+        user_id: user?.id || null, // Allow guest checkouts if policy allows
+        total_amount: subtotal,
+        status: 'pending'
+      })
+      .select()
+      .single();
+
+    if (orderError) {
+      console.error('[DB] Order creation failed:', orderError);
+      throw new Error('Failed to initiate order in database');
+    }
+
+    // 2. Insert Order Items (optional but recommended for record keeping)
+    const orderItems = cart.map((item: any) => ({
+      order_id: order.id,
+      product_id: item.id.startsWith('shp-') ? null : item.id, // Handle external products
+      quantity: item.quantity,
+      unit_price: item.price,
+    }));
+
+    const { error: itemsError } = await supabase.from('order_items').insert(orderItems);
+    if (itemsError) {
+      console.warn('[DB] Failed to save order items, but continuing with payment...', itemsError);
+    }
+
+    // 3. Prepare PayFast Request
     const merchantId = process.env.PAYFAST_MERCHANT_ID!;
     const merchantKey = process.env.PAYFAST_MERCHANT_KEY!;
     const passphrase = process.env.PAYFAST_PASSPHRASE || '';
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
-    // Generate a unique order ID
-    const orderId = `DM-${Date.now()}-${Math.floor(Math.random() * 9999)}`;
+    const orderId = order.id; // Use the Supabase UUID
 
-    // Build the item name from cart contents
     const itemName = cart.length === 1
       ? cart[0].title
       : `DailyMarket Order (${cart.length} items)`;
@@ -55,43 +81,30 @@ export async function POST(req: NextRequest) {
     const itemDescription = cart
       .map((item: any) => `${item.title} x${item.quantity}`)
       .join(', ')
-      .slice(0, 255); // PayFast max 255 chars
+      .slice(0, 255);
 
     const data: Record<string, string> = {
-      // Merchant details
       merchant_id: merchantId,
       merchant_key: merchantKey,
-
-      // Redirect URLs
       return_url: `${appUrl}/payment/success?order=${orderId}`,
       cancel_url: `${appUrl}/payment/cancel`,
       notify_url: `${appUrl}/api/payment/notify`,
-
-      // Customer details
-      name_first: shipping?.firstName || user?.user_metadata?.full_name?.split(' ')[0] || 'Customer',
-      name_last: shipping?.lastName || user?.user_metadata?.full_name?.split(' ').slice(1).join(' ') || 'DailyMarket',
+      name_first: shipping?.firstName || 'Customer',
+      name_last: shipping?.lastName || 'DailyMarket',
       email_address: user?.email || shipping?.email || 'customer@dailymarket.co.za',
-      cell_number: shipping?.phone?.replace(/\D/g, '').slice(0, 20) || '',
-
-      // Order details
-      m_payment_id: orderId,
+      m_payment_id: orderId, // Crucial: This links PayFast to our DB Order
       amount: subtotal.toFixed(2),
       item_name: itemName.slice(0, 100),
       item_description: itemDescription,
-
-      // Custom data (we'll use this in the ITN to identify the order)
       custom_str1: user?.id || 'guest',
       custom_str2: orderId,
     };
 
-    // Remove empty values (PayFast rejects empty strings on some fields)
+    // Clean empty values
     Object.keys(data).forEach(key => {
-      if (data[key] === '' || data[key] === undefined) {
-        delete data[key];
-      }
+      if (data[key] === '' || data[key] === undefined) delete data[key];
     });
 
-    // Generate signature
     const signature = buildSignature(data, passphrase);
     data.signature = signature;
 

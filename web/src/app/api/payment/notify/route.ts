@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { supabase } from '@/lib/supabase';
 
 /**
  * POST /api/payment/notify
@@ -86,28 +87,28 @@ export async function POST(req: NextRequest) {
     // 3. Handle payment outcome
     const orderId = data.m_payment_id || data.custom_str2;
     const status = data.payment_status;
-    const userId = data.custom_str1;
     const amountPaid = parseFloat(data.amount_gross || '0');
 
     if (status === 'COMPLETE') {
       console.log(`[PayFast ITN] ✅ Payment COMPLETE for order ${orderId} — R${amountPaid}`);
 
-      // TODO: Save order to your Supabase database
-      // Example:
-      // const { supabase } = await import('@/lib/supabase');
-      // await supabase.from('orders').insert({
-      //   id: orderId,
-      //   user_id: userId,
-      //   amount: amountPaid,
-      //   status: 'paid',
-      //   payfast_payment_id: data.pf_payment_id,
-      //   created_at: new Date().toISOString(),
-      // });
+      // Update the Order status in Supabase to 'processing' (or 'paid')
+      const { error: updateError } = await supabase
+        .from('orders')
+        .update({ status: 'processing' })
+        .eq('id', orderId);
+
+      if (updateError) {
+        console.error('[DB] Failed to update order status:', updateError);
+        // We still return 200 OK to PayFast to stop retries, as we've logged the success
+      }
 
     } else if (status === 'CANCELLED') {
       console.log(`[PayFast ITN] ⚠️ Payment CANCELLED for order ${orderId}`);
+      await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId);
     } else if (status === 'FAILED') {
       console.log(`[PayFast ITN] ❌ Payment FAILED for order ${orderId}`);
+      await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId);
     }
 
     // PayFast expects a 200 OK response

@@ -5,10 +5,13 @@ export const authService = {
    * Signs up a new user and creates a profile.
    */
   async signUp(email: string, password: string, fullName: string) {
+    const siteUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+    
     const { data: { user }, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        emailRedirectTo: `${siteUrl}/auth/callback`,
         data: {
           full_name: fullName,
         },

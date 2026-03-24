@@ -14,10 +14,10 @@ export default function Header() {
   const { user, loading, signOut } = useAuth();
 
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
+  const isHome = pathname === '/';
 
   return (
-    <header className={`${styles.header} ${isHomePage ? styles.homeHeader : ''}`}>
+    <header className={`${styles.header} ${isHome ? styles.homeHeader : ''}`} style={{ display: 'block' }}>
       {/* Top Header */}
       <div className={styles.topHeader}>
         <div className="container">
