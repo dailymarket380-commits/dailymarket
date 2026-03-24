@@ -53,16 +53,17 @@
 }
 
 .heroBtn {
+  display: inline-block;
   background: white;
   color: black;
-  padding: 1rem 2rem;
-  font-size: 0.85rem;
-  font-weight: 900;
+  padding: 1rem 2.5rem;
   border-radius: 50px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .heroBtn:hover {
@@ -339,14 +340,12 @@
 }
 
 .categoryAppCard {
+  flex: 0 0 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  min-width: 80px;
-  text-decoration: none;
-  transition: transform 0.2s ease;
-  user-select: none;
+  gap: 0.75rem;
+  cursor: pointer;
 }
 
 .categoryAppCard:hover {
@@ -356,15 +355,31 @@
 .categoryIcon {
   width: 70px;
   height: 70px;
-  background: white;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  border: 1px solid rgba(0,0,0,0.03);
-  transition: all 0.3s ease;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border: 1px solid #f0f0f0;
+  transition: transform 0.3s ease;
+}
+
+.categoryIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.categoryText {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #333;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .categoryAppCard:hover .categoryIcon {
@@ -395,31 +410,35 @@
 
 @media (max-width: 768px) {
   .heroContent { flex-direction: column; min-height: auto; align-items: stretch; padding: 1rem; padding-top: 0; }
-  .heroImage { position: relative; width: 100%; height: 280px; order: 1; border-radius: 12px; overflow: hidden; margin-bottom: -100px; }
-  .heroTextContainer { padding: 1.5rem; width: calc(100% - 2rem); max-width: none; transform: none; aspect-ratio: auto; order: 2; margin: 0 auto; border-radius: 16px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
-  .heroTitle { font-size: 1.8rem; margin-bottom: 0.5rem; }
-  .heroSubtitle { font-size: 0.8rem; margin-bottom: 1.5rem; }
-  .heroBtn { padding: 0.75rem 1.5rem; font-size: 0.75rem; }
+  .heroImage { position: relative; width: 100%; height: 280px; order: 1; border-radius: 16px; overflow: hidden; margin-bottom: -110px; }
+  .heroTextContainer { padding: 2.5rem 1.5rem; width: calc(100% - 2rem); max-width: none; transform: none; aspect-ratio: auto; order: 2; margin: 0 auto; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+  .heroTitle { font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -1px; line-height: 1.1; }
+  .heroSubtitle { font-size: 0.8rem; margin-bottom: 2rem; opacity: 0.9; }
+  .heroBtn { padding: 0.9rem 2rem; font-size: 0.8rem; }
   
-  /* Make Feature Cards Swipeable like an App */
   .featureGrid { 
     display: flex; 
     overflow-x: auto; 
     gap: 1rem; 
-    padding-bottom: 1rem; 
+    padding-bottom: 1.5rem; 
+    padding-left: 0.5rem;
     scroll-snap-type: x mandatory;
     -ms-overflow-style: none; scrollbar-width: none;
   }
-  .featureGrid::-webkit-scrollbar { display: none; }
   .featureCard { 
-    flex: 0 0 calc(75% - 1rem); 
-    scroll-snap-align: center; 
-    border-radius: 12px;
-    height: 280px;
+    flex: 0 0 65%; 
+    scroll-snap-align: start; 
+    border-radius: 16px;
+    height: 320px;
   }
-  .featureOverlay { padding: 1rem; margin: 0 0.75rem 0.75rem; }
-  .featureOverlay h3 { font-size: 0.9rem; }
-  
+  .featureOverlay { 
+    padding: 1.25rem 1rem; 
+    margin: 0 1rem 1rem; 
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+  }
+  .featureOverlay h3 { font-size: 0.85rem; letter-spacing: 0.5px; }
+}  
   .categoryGrid { grid-template-columns: repeat(2, 1fr); }
   
   /* Promos Swipeable */

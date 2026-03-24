@@ -1,0 +1,53 @@
+.magicContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputWrapper {
+  display: flex;
+  background: white;
+  border: 1.5px solid #1a1a1a;
+  border-radius: 50px;
+  overflow: hidden;
+  height: 40px;
+  align-items: stretch;
+}
+
+.magicInput {
+  flex: 1;
+  border: none;
+  padding: 0 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  outline: none;
+  color: #1a1a1a;
+}
+
+.magicBtn {
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  padding: 0 1rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.magicBtn:disabled {
+  opacity: 0.5;
+}
+
+.status {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  padding-left: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

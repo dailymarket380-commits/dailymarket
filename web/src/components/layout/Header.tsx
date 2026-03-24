@@ -6,6 +6,8 @@ import { useAuth } from '@/context/AuthContext';
 import CartDrawer from '../cart/CartDrawer';
 import styles from './Header.module.css';
 
+import { ConsumerMagicAdd } from './ConsumerMagicAdd';
+
 export default function Header() {
   const { totalItems, isCartOpen, setIsCartOpen } = useCart();
   const { user, loading, signOut } = useAuth();
@@ -21,6 +23,10 @@ export default function Header() {
             </Link>
 
             <div className={styles.headerActions}>
+              {/* Magic Add - Added for the "New Add Features" request */}
+              <div className={styles.magicSearchWrapper}>
+                <ConsumerMagicAdd />
+              </div>
 
               {/* Auth State */}
               {!loading && (
@@ -74,6 +80,7 @@ export default function Header() {
         <div className={`container ${styles.navContainer}`}>
           <div className={styles.navLinks}>
             <Link href="/shop">SHOP BY DEPARTMENT <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg></Link>
+            <Link href="/discovery">DISCOVERY</Link>
             <Link href="/shop?category=sweets">GOURMET SELECTIONS</Link>
             <Link href="/shop?category=meat-poultry">THE BUTCHERY</Link>
             <Link href="/shop?category=pantry">ARTISAN PANTRY</Link>

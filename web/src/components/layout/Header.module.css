@@ -230,4 +230,19 @@
     font-size: 0.75rem;
   }
 }
+.magicSearchWrapper {
+  margin-right: 2rem;
+  width: 250px;
+}
 
+@media (max-width: 1024px) {
+  .magicSearchWrapper {
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .magicSearchWrapper {
+    display: none; /* Hide on mobile to avoid cluttering top bar */
+  }
+}

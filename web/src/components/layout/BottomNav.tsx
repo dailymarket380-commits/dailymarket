@@ -29,6 +29,14 @@ export default function BottomNav() {
         <span className={styles.navItemText}>Search</span>
       </Link>
 
+      <Link href="/discovery" className={`${styles.navItem} ${pathname.startsWith('/discovery') ? styles.active : ''}`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+        </svg>
+        <span className={styles.navItemText}>Discovery</span>
+      </Link>
+
       <div className={styles.navItem} onClick={() => setIsCartOpen(true)} style={{ cursor: 'pointer', color: 'black' }}>
         <div className={styles.cartWrapper}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

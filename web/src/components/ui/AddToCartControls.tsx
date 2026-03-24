@@ -20,32 +20,55 @@ export function AddToCartControls({ product }: AddToCartControlsProps) {
   const { addToCart } = useCart();
 
   const handleAdd = () => {
+    // Mobile Haptic Feedback
+    if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+      window.navigator.vibrate(50);
+    }
+
     if (addToCart) {
-      // Add 'quantity' times
-      for (let i = 0; i < quantity; i++) {
-        addToCart({
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          imageUrl: product.imageUrl,
-          vendorName: product.vendorName
-        });
-      }
+      addToCart({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        vendorName: product.vendorName,
+        quantity: quantity // Assuming CartContext supports a quantity parameter
+      });
     }
   };
 
   return (
     <div className={styles.purchaseControls}>
-      <div className={styles.quantitySelector}>
-        <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-        <input 
-          type="number" 
-          value={quantity} 
-          onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-        />
-        <button onClick={() => setQuantity(quantity + 1)}>+</button>
+      <div className={styles.quantityStepper}>
+        <button 
+          className={styles.stepperBtn} 
+          onClick={() => {
+            setQuantity(Math.max(1, quantity - 1));
+            if ('vibrate' in navigator) navigator.vibrate(10);
+          }}
+        >
+          -
+        </button>
+        <div className={styles.quantityDisplay}>
+          <span className={styles.quantityNum}>{quantity}</span>
+        </div>
+        <button 
+          className={styles.stepperBtn} 
+          onClick={() => {
+            setQuantity(quantity + 1);
+            if ('vibrate' in navigator) navigator.vibrate(10);
+          }}
+        >
+          +
+        </button>
       </div>
-      <Button variant="primary" size="lg" fullWidth onClick={handleAdd}>
+      <Button 
+        variant="primary" 
+        size="lg" 
+        fullWidth 
+        onClick={handleAdd}
+        className={styles.addToCartBtn}
+      >
         ADD TO CART
       </Button>
     </div>

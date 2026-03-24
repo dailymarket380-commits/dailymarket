@@ -13,6 +13,12 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 export const metadata: Metadata = {
   title: 'DailyMarket | Premium Grocery Delivery',
   description: 'Premium grocery e-commerce inspired by Woolworths Food.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'DailyMarket',
+  },
   icons: {
     icon: '/icon.svg',
     apple: '/icon.svg',
