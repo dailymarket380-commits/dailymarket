@@ -13,6 +13,10 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 export const metadata: Metadata = {
   title: 'DailyMarket | Premium Grocery Delivery',
   description: 'Premium grocery e-commerce inspired by Woolworths Food.',
+  icons: {
+    icon: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export const viewport: Viewport = {
