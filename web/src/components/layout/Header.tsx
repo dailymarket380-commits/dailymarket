@@ -25,11 +25,6 @@ export default function Header() {
             </Link>
 
             <div className={styles.headerActions}>
-              {/* Magic Search bar always visible in top bar on desktop */}
-              <div className={styles.magicSearchWrapper}>
-                <ConsumerMagicAdd />
-              </div>
-
               {!loading && (
                 user ? (
                   <div className={styles.userMenu}>
@@ -60,7 +55,10 @@ export default function Header() {
             <Link href="/bakery">BAKERY</Link>
             <Link href="/meat-poultry">BUTCHERY</Link>
             <Link href="/discovery">OFFERS</Link>
-            <Link href="/re-order">QUICK BUY</Link>
+          </div>
+
+          <div className={styles.magicSearchRow}>
+            <ConsumerMagicAdd />
           </div>
         </div>
       </nav>
