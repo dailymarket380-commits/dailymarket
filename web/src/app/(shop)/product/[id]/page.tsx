@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { fetchProductById } from '@/services/marketplaceService';
 import { AddToCartControls } from '@/components/ui/AddToCartControls';
 import styles from './page.module.css';
@@ -11,7 +12,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
         <h1>Product Not Found</h1>
         <p>Sorry, the product you are looking for does not exist.</p>
-        <a href="/" style={{ color: '#f97316', fontWeight: 800 }}>GO BACK HOME</a>
+        <Link href="/" style={{ color: '#f97316', fontWeight: 800 }}>GO BACK HOME</Link>
       </div>
     );
   }
@@ -20,7 +21,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     <div className={`container ${styles.detailLayout}`}>
       {/* Breadcrumbs */}
       <nav className={styles.breadcrumbs}>
-        <a href="/">Home</a> / <a href={`/${product.category}`}>{product.category.toUpperCase().replace('-', ' & ')}</a> / <span>{product.title}</span>
+        <Link href="/">Home</Link> / <Link href={`/${product.category}`}>{product.category.toUpperCase().replace('-', ' & ')}</Link> / <span>{product.title}</span>
       </nav>
 
       <div className={styles.mainContent}>

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { Suspense } from 'react';
 import { Inter } from 'next/font/google';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -44,10 +45,14 @@ export default function RootLayout({
         <ToastProvider>
           <AuthProvider>
             <CartProvider>
-              <Header />
+              <Suspense fallback={<div style={{ height: '70px' }} />}>
+                <Header />
+              </Suspense>
               <main className="main-content">{children}</main>
               <Footer />
-              <BottomNav />
+              <Suspense fallback={null}>
+                <BottomNav />
+              </Suspense>
             </CartProvider>
           </AuthProvider>
         </ToastProvider>
