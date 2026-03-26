@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const { email, token } = await req.json();
+    const { email, token, password } = await req.json();
     const cleanEmail = email.toLowerCase();
     
     // 1. Verify the code against our cache
@@ -78,26 +78,26 @@ export async function PUT(req: NextRequest) {
     // Clear the code after successful validation
     otpCache.delete(cleanEmail);
 
-    // 2. Perform the actual Supabase DB authentication using our secure derived password layer
-    const derivedPassword = generateDerivedPassword(cleanEmail);
+    // 2. Perform the actual Supabase DB authentication using the provided password or fallback to derived
+    const finalPassword = password || generateDerivedPassword(cleanEmail);
 
     let { data: { user, session }, error: signInError } = await supabase.auth.signInWithPassword({
       email: cleanEmail,
-      password: derivedPassword
+      password: finalPassword
     });
 
     // If perfectly successful, the user existed! If not, we automatically create them behind the scenes (SignUp flow handled implicitly by OTP!)
     if (signInError && signInError.message.includes('Invalid login credentials')) {
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: cleanEmail,
-        password: derivedPassword,
+        password: finalPassword,
       });
       if (signUpError) throw signUpError;
       
       // Attempt login one final time to fetch session
       const authRes = await supabase.auth.signInWithPassword({
         email: cleanEmail,
-        password: derivedPassword
+        password: finalPassword
       });
       user = authRes.data.user;
       session = authRes.data.session;

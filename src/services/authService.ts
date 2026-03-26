@@ -75,11 +75,11 @@ export const authService = {
   /**
    * Verifies the 6-digit OTP code against the Custom Local API and handles Supabase auth seamlessly.
    */
-  async verifyOtp(email: string, token: string) {
+  async verifyOtp(email: string, token: string, password?: string) {
     const res = await fetch('/api/auth/otp', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, token })
+      body: JSON.stringify({ email, token, password })
     });
 
     const json = await res.json();

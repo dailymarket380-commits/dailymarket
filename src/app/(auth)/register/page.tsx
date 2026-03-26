@@ -10,6 +10,7 @@ function RegisterForm() {
   const [authMode, setAuthMode] = useState<'details' | 'otp_verify'>('details');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [otpToken, setOtpToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ text: string; success: boolean } | null>(null);
@@ -33,8 +34,8 @@ function RegisterForm() {
         });
         setAuthMode('otp_verify');
       } else {
-        // Step 2: Verify the 6-digit code
-        const user = await authService.verifyOtp(email, otpToken);
+        // Step 2: Verify the 6-digit code and provide their chosen password for Supabase account creation
+        const user = await authService.verifyOtp(email, otpToken, password);
         
         // (Optional background) Update their display name
         if (user) {
@@ -99,6 +100,18 @@ function RegisterForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="name@example.com"
+                />
+              </div>
+              <div className={styles.inputGroup}>
+                <label htmlFor="password">Choose Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="At least 6 characters"
+                  minLength={6}
                 />
               </div>
             </>
