@@ -145,14 +145,33 @@ export default async function Home() {
       )}
 
 
-      {/* ── Original Hero (Desktop Only) ── */}
+      {/* ── Trust Bar ── */}
+      <section className="container" style={{ padding: '2rem 0', borderBottom: '1px solid #f0f0f0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', opacity: 0.8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1px' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            VERIFIED VENDORS
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1px' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+            EXPRESS DELIVERY
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1px' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            SECURE CHECKOUT
+          </div>
+        </div>
+      </section>
+
+      {/* ── Glassmorphic Hero ── */}
       <section className={styles.heroSection}>
         <div className="container">
           <div className={styles.heroContent}>
             <div className={styles.heroTextContainer}>
-              <h1 className={styles.heroTitle}>THE FUTURE OF FOOD COMMERCE.</h1>
-              <p className={styles.heroSubtitle}>QUALITY ESSENTIALS. COMPETITIVE PRICES. DELIVERED TODAY.</p>
-              <Link href="/shop" className={styles.heroBtn}>START SHOPPING</Link>
+              <p style={{ letterSpacing: '4px', fontWeight: 800, fontSize: '0.7rem', marginBottom: '1rem', color: '#10b981' }}>DAILYMARKET PREMIER</p>
+              <h1 className={styles.heroTitle} style={{ fontSize: '4.5rem', marginBottom: '2rem' }}>THE ELITE SOUTH AFRICAN MARKETPLACE</h1>
+              <p className={styles.heroSubtitle} style={{ maxWidth: '400px', lineHeight: 1.6 }}>Direct access to artisan produce, handcrafted butchery, and premium pantry staples.</p>
+              <Link href="/shop" className={styles.heroBtn} style={{ background: '#10b981', color: 'white' }}>EXPLORE THE MARKET</Link>
             </div>
             <div className={styles.heroImage}>
               <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&h=900&fit=crop" alt="Premium Grocery Delivery" />

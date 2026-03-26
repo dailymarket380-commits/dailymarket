@@ -1,15 +1,15 @@
 .footer {
-  background-color: #1a1a1a;
+  background-color: #0a0a0a;
   color: rgba(255,255,255,0.75);
-  margin-top: 4rem;
+  margin-top: 8rem;
 }
 
 /* ── Trust Bar (B.L.A.S.T - Believe) ── */
 .trustBar {
   background: white;
-  border-top: 3px solid #f97316;
+  border-top: 4px solid #10b981;
   border-bottom: 1px solid #f0f0f0;
-  padding: 1.5rem 0;
+  padding: 2rem 0;
 }
 
 .trustGrid {
@@ -81,7 +81,7 @@
 }
 
 .column a:hover {
-  color: #f97316;
+  color: #10b981;
 }
 
 .column p {
