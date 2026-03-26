@@ -77,10 +77,7 @@ export const SHOPIFY_STORES = [
   { url: 'https://peachz.co.za/products.json', name: 'Peachz (Tech Beauty)', storeId: 'peachz' },
   { url: 'https://elevenpast.co.za/products.json', name: 'ElevenPast Home', storeId: 'eleven-past' },
   { url: 'https://plantify.co.za/products.json', name: 'Plantify (Indoor Jungle)', storeId: 'plantify' },
-  { url: 'https://lulaclothing.co.za/products.json', name: 'Lula Clothing', storeId: 'lula' },
-  { url: 'https://www.thegadgetshop.co.za/products.json', name: 'The Gadget Shop', storeId: 'gadget-shop' },
-  // These are backup/extra sources
-  { url: 'https://biltongland.com/products.json', name: 'Biltong Land', storeId: 'biltong-land' }
+  { url: 'https://lulaclothing.co.za/products.json', name: 'Lula Clothing', storeId: 'lula' }
 ];
 
 /**

@@ -1,13 +1,17 @@
-'use client';
-
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import styles from './BottomNav.module.css';
 
 export default function BottomNav() {
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { totalItems, setIsCartOpen } = useCart();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (path: string) => pathname === path;
 
@@ -45,7 +49,7 @@ export default function BottomNav() {
             <path d="M3 6h18"/>
             <path d="M16 10a4 4 0 0 1-8 0"/>
           </svg>
-          {totalItems > 0 && <span className={styles.cartBadge}>{totalItems}</span>}
+          {mounted && totalItems > 0 && <span className={styles.cartBadge}>{totalItems}</span>}
         </div>
         <span className={styles.navItemText}>Baskets</span>
       </div>
