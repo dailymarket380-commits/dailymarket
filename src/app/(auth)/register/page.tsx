@@ -7,9 +7,10 @@ import { authService } from '@/services/authService';
 import styles from '../login/page.module.css';
 
 function RegisterForm() {
+  const [authMode, setAuthMode] = useState<'details' | 'otp_verify'>('details');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [otpToken, setOtpToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ text: string; success: boolean } | null>(null);
   const router = useRouter();
@@ -23,17 +24,34 @@ function RegisterForm() {
     setMessage(null);
 
     try {
-      await authService.signUp(email, password, fullName);
-      setMessage({
-        text: '✅ Account created! Check your email to verify, then sign in.',
-        success: true,
-      });
-      // After a moment, redirect to login with the same redirect param
-      setTimeout(() => {
-        router.push(`/login${redirectTo !== '/' ? `?redirect=${redirectTo}` : ''}`);
-      }, 2500);
+      if (authMode === 'details') {
+        // Step 1: Send OTP for passwordless signup
+        await authService.signInWithOtp(email);
+        setMessage({
+          text: 'A 6-digit security code has been sent to your email.',
+          success: true,
+        });
+        setAuthMode('otp_verify');
+      } else {
+        // Step 2: Verify the 6-digit code
+        const user = await authService.verifyOtp(email, otpToken);
+        
+        // (Optional background) Update their display name
+        if (user) {
+          try {
+            const { supabase } = await import('@/lib/supabase');
+            await supabase.from('profiles').upsert({ id: user.id, full_name: fullName });
+          } catch (e) {}
+        }
+
+        setMessage({ text: '✅ Verified successfully!', success: true });
+        setTimeout(() => {
+          router.push(redirectTo);
+          router.refresh();
+        }, 1000);
+      }
     } catch (err: any) {
-      setMessage({ text: err.message || 'Failed to register. Please try again.', success: false });
+      setMessage({ text: err.message || 'Verification failed. Please try again.', success: false });
     } finally {
       setLoading(false);
     }
@@ -58,49 +76,59 @@ function RegisterForm() {
         )}
 
         <form onSubmit={handleRegister} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="fullName">Full Name</label>
-            <input
-              id="fullName"
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-              placeholder="John Doe"
-            />
-          </div>
+          {authMode === 'details' && (
+            <>
+              <div className={styles.inputGroup}>
+                <label htmlFor="fullName">Full Name</label>
+                <input
+                  id="fullName"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                  placeholder="John Doe"
+                />
+              </div>
 
-          <div className={styles.inputGroup}>
-            <label htmlFor="email">Email Address</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="name@example.com"
-            />
-          </div>
+              <div className={styles.inputGroup}>
+                <label htmlFor="email">Email Address</label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="name@example.com"
+                />
+              </div>
+            </>
+          )}
 
-          <div className={styles.inputGroup}>
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="At least 6 characters"
-              minLength={6}
-            />
-          </div>
+          {authMode === 'otp_verify' && (
+            <div className={styles.inputGroup}>
+              <label htmlFor="otpToken">Enter 6-Digit Code</label>
+              <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: '8px' }}>
+                Secure pin sent to {email}
+              </p>
+              <input
+                id="otpToken"
+                type="text"
+                value={otpToken}
+                onChange={(e) => setOtpToken(e.target.value)}
+                required
+                placeholder="123456"
+                maxLength={6}
+                style={{ letterSpacing: '4px', textAlign: 'center', fontSize: '1.2rem' }}
+              />
+            </div>
+          )}
 
           {message && (
-            <p className={message.success ? styles.success : styles.error}>{message.text}</p>
+            <p className={message.success ? styles.success : styles.error} style={message.success ? { color: '#10b981', padding: '10px', background: '#d1fae5', borderRadius: '4px', textAlign: 'center' } : {}}>{message.text}</p>
           )}
 
           <button type="submit" className={styles.submitBtn} disabled={loading}>
-            {loading ? 'CREATING ACCOUNT...' : 'CREATE FREE ACCOUNT'}
+            {loading ? 'PROCESSING...' : authMode === 'details' ? 'SEND VERIFICATION PIN' : 'VERIFY & CREATE ACCOUNT'}
           </button>
         </form>
 
