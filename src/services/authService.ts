@@ -56,35 +56,41 @@ export const authService = {
   },
 
   /**
-   * Sends a One-Time Password (OTP) or Magic Link to the email.
+   * Sends a One-Time Password (OTP) via Custom Next.js API using Nodemailer.
    */
   async signInWithOtp(email: string) {
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: true }
+    const res = await fetch('/api/auth/otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
     });
-    if (error) {
-      console.error('OTP send error:', error);
-      throw error;
+    
+    const json = await res.json();
+    if (!res.ok) {
+      console.error('OTP send error:', json.error);
+      throw new Error(json.error || 'Failed to send OTP code');
     }
   },
 
   /**
-   * Verifies the 6-digit OTP code sent to the email.
+   * Verifies the 6-digit OTP code against the Custom Local API and handles Supabase auth seamlessly.
    */
   async verifyOtp(email: string, token: string) {
-    const { data: { user, session }, error } = await supabase.auth.verifyOtp({
-      email,
-      token,
-      type: 'email',
+    const res = await fetch('/api/auth/otp', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, token })
     });
 
-    if (error) {
-      console.error('OTP verify error:', error);
-      throw error;
+    const json = await res.json();
+    if (!res.ok) {
+      console.error('OTP verify error:', json.error);
+      throw new Error(json.error || 'Invalid OTP code');
     }
 
-    // Explicitly set the session so the app recognizes the user
+    const { user, session } = json;
+
+    // Explicitly set the session locally so the app's Supabase context instantly recognizes the newly authenticated user!
     if (session) {
       await supabase.auth.setSession(session);
     }
