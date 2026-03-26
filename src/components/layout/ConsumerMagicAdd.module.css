@@ -7,19 +7,20 @@
 
 .inputWrapper {
   display: flex;
-  background: #f4f4f4;
-  border: 1.5px solid transparent;
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   overflow: hidden;
-  height: 48px;
+  height: 52px;
   align-items: stretch;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
 }
 
 .inputWrapper:focus-within {
   background: white;
-  border-color: #1a1a1a;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  border-color: #10b981;
+  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
 }
 
 .magicInput {
@@ -33,13 +34,22 @@
 }
 
 .magicBtn {
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
   color: white;
   border: none;
-  padding: 0 1rem;
-  font-size: 0.75rem;
-  font-weight: 900;
+  padding: 0 1.5rem;
+  font-size: 0.8rem;
+  font-weight: 800;
   cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.magicBtn:hover {
+  filter: brightness(1.1);
+  box-shadow: -5px 0 20px rgba(16, 185, 129, 0.2);
 }
 
 .magicBtn:disabled {
