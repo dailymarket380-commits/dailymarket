@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 import { supabase } from '@/lib/supabase';
 
 /**
@@ -101,6 +102,42 @@ export async function POST(req: NextRequest) {
       if (updateError) {
         console.error('[DB] Failed to update order status:', updateError);
         // We still return 200 OK to PayFast to stop retries, as we've logged the success
+      }
+
+      // SEND AUTOMATED ORDER RECEIPT TO CUSTOMER!
+      try {
+        const customerEmail = data.email_address;
+        if (customerEmail) {
+          const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+              user: process.env.EMAIL_USER || 'dailymarket380@gmail.com',
+              pass: process.env.EMAIL_PASS || 'pxog cqgl zqsk trfs',
+            },
+          });
+          await transporter.sendMail({
+            from: '"DailyMarket Elite Orders" <' + (process.env.EMAIL_USER || 'dailymarket380@gmail.com') + '>',
+            to: customerEmail,
+            subject: `Payment Receipt: Order #${orderId.slice(0, 8)}`,
+            html: `
+              <div style="font-family: Arial, sans-serif; padding: 40px; background: #fff; max-width: 600px; margin: auto; border: 1px solid #eaeaea;">
+                <h2 style="color: #10b981; margin-bottom: 2px;">Thank you for your order!</h2>
+                <p style="color: #666;">We have successfully received your payment of <strong>R${amountPaid}</strong>.</p>
+                <hr style="border-top: 1px solid #f0f0f0; margin: 30px 0;" />
+                <p style="font-size: 14px; color: #888;">Order Reference: ${orderId}</p>
+                <p style="font-size: 14px; color: #888;">Status: <strong>Processing for Delivery</strong></p>
+                <div style="margin-top: 40px;">
+                  <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="background: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">Track My Order</a>
+                </div>
+              </div>
+            `,
+          });
+          console.log(`[Automated Receipt] Sent email to ${customerEmail}`);
+        }
+      } catch (emailErr) {
+        console.error('[Automated Receipt] Failed to send confirmation email:', emailErr);
       }
 
     } else if (status === 'CANCELLED') {
