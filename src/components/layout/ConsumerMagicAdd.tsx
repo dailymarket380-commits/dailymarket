@@ -70,7 +70,7 @@ export function ConsumerMagicAdd() {
   return (
     <div className={styles.magicContainer}>
       <div className={styles.inputWrapper}>
-        <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '1.25rem', color: '#888' }}>
+        <div style={{ display: 'flex', alignItems: 'center', color: '#888' }}>
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </div>
         <input 
