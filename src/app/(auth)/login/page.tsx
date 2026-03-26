@@ -7,10 +7,13 @@ import { authService } from '@/services/authService';
 import styles from './page.module.css';
 
 function LoginForm() {
+  const [authMode, setAuthMode] = useState<'password' | 'otp_request' | 'otp_verify'>('password');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [otpToken, setOtpToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -21,13 +24,24 @@ function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setSuccessMsg(null);
 
     try {
-      await authService.signIn(email, password);
-      router.push(redirectTo);
-      router.refresh();
+      if (authMode === 'password') {
+        await authService.signIn(email, password);
+        router.push(redirectTo);
+        router.refresh();
+      } else if (authMode === 'otp_request') {
+        await authService.signInWithOtp(email);
+        setSuccessMsg('A 6-digit code has been sent to your email.');
+        setAuthMode('otp_verify');
+      } else if (authMode === 'otp_verify') {
+        await authService.verifyOtp(email, otpToken);
+        router.push(redirectTo);
+        router.refresh();
+      }
     } catch (err: any) {
-      setError(err.message || 'Invalid email or password. Please try again.');
+      setError(err.message || 'Authentication failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -54,36 +68,72 @@ function LoginForm() {
         )}
 
         <form onSubmit={handleLogin} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="email">Email Address</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="name@example.com"
-            />
-          </div>
+          {authMode !== 'otp_verify' && (
+            <div className={styles.inputGroup}>
+              <label htmlFor="email">Email Address</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="name@example.com"
+              />
+            </div>
+          )}
 
-          <div className={styles.inputGroup}>
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-            />
-          </div>
+          {authMode === 'password' && (
+            <div className={styles.inputGroup}>
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+              />
+            </div>
+          )}
+
+          {authMode === 'otp_verify' && (
+            <div className={styles.inputGroup}>
+              <label htmlFor="otpToken">Enter 6-Digit Code</label>
+              <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: '8px' }}>
+                Sent to {email}
+              </p>
+              <input
+                id="otpToken"
+                type="text"
+                value={otpToken}
+                onChange={(e) => setOtpToken(e.target.value)}
+                required
+                placeholder="123456"
+                maxLength={6}
+                style={{ letterSpacing: '4px', textAlign: 'center', fontSize: '1.2rem' }}
+              />
+            </div>
+          )}
 
           {error && <p className={styles.error}>{error}</p>}
+          {successMsg && <p style={{ color: '#10b981', fontSize: '0.85rem', fontWeight: 600, textAlign: 'center', padding: '10px', background: '#d1fae5', borderRadius: '4px' }}>{successMsg}</p>}
 
           <button type="submit" className={styles.submitBtn} disabled={loading}>
-            {loading ? 'SIGNING IN...' : 'SIGN IN'}
+            {loading ? 'PROCESSING...' : authMode === 'password' ? 'SIGN IN' : authMode === 'otp_request' ? 'SEND LOGIN CODE' : 'VERIFY & LOGIN'}
           </button>
         </form>
+
+        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+          {authMode === 'password' ? (
+            <button type="button" onClick={() => { setAuthMode('otp_request'); setError(null); }} style={{ background: 'none', border: 'none', color: '#10b981', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem' }}>
+              Sign in with Email Code (Passwordless)
+            </button>
+          ) : (
+            <button type="button" onClick={() => { setAuthMode('password'); setError(null); }} style={{ background: 'none', border: 'none', color: '#666', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem', textDecoration: 'underline' }}>
+              Use Password Instead
+            </button>
+          )}
+        </div>
 
         <p className={styles.switchAuth}>
           Don&apos;t have an account?{' '}

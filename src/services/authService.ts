@@ -56,6 +56,43 @@ export const authService = {
   },
 
   /**
+   * Sends a One-Time Password (OTP) or Magic Link to the email.
+   */
+  async signInWithOtp(email: string) {
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: true }
+    });
+    if (error) {
+      console.error('OTP send error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Verifies the 6-digit OTP code sent to the email.
+   */
+  async verifyOtp(email: string, token: string) {
+    const { data: { user, session }, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'email',
+    });
+
+    if (error) {
+      console.error('OTP verify error:', error);
+      throw error;
+    }
+
+    // Explicitly set the session so the app recognizes the user
+    if (session) {
+      await supabase.auth.setSession(session);
+    }
+    
+    return user;
+  },
+
+  /**
    * Logs out the current user.
    */
   async signOut() {
