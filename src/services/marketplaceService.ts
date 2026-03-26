@@ -244,6 +244,129 @@ async function fetchFromStore(store: typeof SHOPIFY_STORES[0], retries = 2): Pro
   return [];
 }
 
+const FALLBACK_PRODUCTS: MarketplaceProduct[] = [
+  {
+    id: 'fb-1',
+    title: 'Simba Fruit Chutney Chips (120g)',
+    description: 'South Africa\'s favourite iconic potato chips with a sweet and tangy chutney flavour.',
+    category: 'sweets',
+    base_price: 18.50,
+    premium_price: 24.99,
+    unit: 'Bag',
+    stock_quantity: 100,
+    image_url: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'Simba Snacks',
+    rating: 4.9,
+    reviewCount: 1542
+  },
+  {
+    id: 'fb-2',
+    title: 'Nescafé Classic Instant Coffee (200g)',
+    description: 'The rich and bold taste of the original Nescafé Classic you know and love.',
+    category: 'beverages',
+    base_price: 85.00,
+    premium_price: 119.99,
+    unit: 'Jar',
+    stock_quantity: 50,
+    image_url: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'Nescafé SA',
+    rating: 4.8,
+    reviewCount: 890
+  },
+  {
+    id: 'fb-3',
+    title: 'Traditional Wagyu Beef Biltong (250g)',
+    description: 'Hand-cured, premium fat-marbled wagyu beef biltong. Soft and flavorful.',
+    category: 'meat-poultry',
+    base_price: 120.00,
+    premium_price: 189.99,
+    unit: 'Pack',
+    stock_quantity: 25,
+    image_url: 'https://images.unsplash.com/photo-1603048297172-c9254479895e?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'The Butcher\'s Block',
+    rating: 5.0,
+    reviewCount: 420
+  },
+  {
+    id: 'fb-4',
+    title: 'Artisan Sourdough Loaf (800g)',
+    description: 'Stone-ground flour, 24-hour fermented artisan sourdough. Baked fresh daily.',
+    category: 'bakery',
+    base_price: 45.00,
+    premium_price: 64.99,
+    unit: 'Loaf',
+    stock_quantity: 15,
+    image_url: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'Corner Bakery',
+    rating: 4.7,
+    reviewCount: 230
+  },
+  {
+    id: 'fb-5',
+    title: 'Farm Fresh Hass Avocados (2 Pack)',
+    description: 'Buttery, ripe-and-ready premium avocados from the Limpopo valley.',
+    category: 'fruit-veg',
+    base_price: 35.00,
+    premium_price: 49.99,
+    unit: 'Pack',
+    stock_quantity: 40,
+    image_url: 'https://images.unsplash.com/photo-1523456762203-32d16453664c?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'Green Field Farms',
+    rating: 4.6,
+    reviewCount: 110
+  },
+  {
+    id: 'fb-6',
+    title: 'Clover Full Cream Milk (2L)',
+    description: 'Farm fresh milk with that creamy taste you love. High in calcium.',
+    category: 'dairy',
+    base_price: 30.00,
+    premium_price: 44.99,
+    unit: 'Bottle',
+    stock_quantity: 60,
+    image_url: 'https://images.unsplash.com/photo-1528750955925-53f58e2cbaee?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'Clover Dairy',
+    rating: 4.9,
+    reviewCount: 2100
+  },
+  {
+    id: 'fb-7',
+    title: 'Red Bull Energy Drink (250ml)',
+    description: 'Wiiings when you need them. Vitalizes body and mind.',
+    category: 'beverages',
+    base_price: 15.00,
+    premium_price: 24.99,
+    unit: 'Can',
+    stock_quantity: 200,
+    image_url: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'Red Bull SA',
+    rating: 4.8,
+    reviewCount: 3400
+  },
+  {
+    id: 'fb-8',
+    title: 'Mrs H.S. Balls Chutney (470g)',
+    description: 'The original South African peach chutney. Iconic and irreplaceable.',
+    category: 'pantry',
+    base_price: 40.00,
+    premium_price: 59.99,
+    unit: 'Bottle',
+    stock_quantity: 80,
+    image_url: 'https://images.unsplash.com/photo-1587049352847-4d4e12e2c0e8?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'Mrs Balls Original',
+    rating: 5.0,
+    reviewCount: 5600
+  }
+];
+
 import { supabase } from '@/lib/supabase';
 
 export async function fetchSAProducts(page = 1, pageSize = 400): Promise<MarketplaceProduct[]> {
@@ -302,7 +425,15 @@ export async function fetchSAProducts(page = 1, pageSize = 400): Promise<Marketp
 
   // 3. Merge and Sort (Local merchants first, then Shopify)
   // We place local products first to ensure vendor entries are prominently featured
-  return [...localProducts, ...shopifyProducts];
+  const finalProducts = [...localProducts, ...shopifyProducts];
+
+  // 🚀 FALLBACK: If everything is missing (e.g. no internet/secrets), show elite placeholders
+  if (finalProducts.length === 0) {
+    console.log('[Marketplace] All feeds empty. Serving high-fidelity fallback products.');
+    return FALLBACK_PRODUCTS;
+  }
+
+  return finalProducts;
 }
 
 export async function fetchProductById(id: string): Promise<MarketplaceProduct | null> {
