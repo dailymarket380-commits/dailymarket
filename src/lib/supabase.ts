@@ -11,4 +11,5 @@ if (typeof window === 'undefined' && (!process.env.NEXT_PUBLIC_SUPABASE_URL || !
   );
 }
 
+export const isSupabaseReady = process.env.NEXT_PUBLIC_SUPABASE_URL && !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

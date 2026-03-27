@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseReady } from '@/lib/supabase';
 import type { User } from '@supabase/supabase-js';
 
 interface AuthContextType {
@@ -21,6 +21,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // 🚀 SAFETY GUARD: Don't attempt to call Supabase Auth if credentials are missing
+    if (!isSupabaseReady) {
+      console.log('[AuthContext] Supabase credentials missing/placeholder. Auth skipped.');
+      setLoading(false);
+      return;
+    }
+
     // Get current session on mount
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -37,7 +44,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    if (isSupabaseReady) {
+      await supabase.auth.signOut();
+    }
     setUser(null);
   };
 
