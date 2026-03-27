@@ -11,6 +11,7 @@ type Product = {
   id: string; title: string; description: string; category: string;
   base_price: number; premium_price: number; unit: string;
   stock_quantity: number; vendor_name: string; created_at: string;
+  image_url?: string;
 };
 
 const CAT: Record<string, string> = {

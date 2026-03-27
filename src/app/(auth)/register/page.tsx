@@ -60,97 +60,114 @@ function RegisterForm() {
 
   return (
     <div className={styles.authContainer}>
-      <div className={styles.authBox}>
-        <div className={styles.authIcon}>✨</div>
+      <div className={styles.authSplit}>
+        <div className={styles.formSide}>
+          <div className={styles.authBox}>
+            <div className={styles.authIcon}>✨</div>
 
-        <h1 className={styles.title}>Create Account</h1>
-        <p className={styles.subtitle}>
-          {redirectTo === '/checkout'
-            ? '🔒 One quick step before checkout'
-            : 'Join DailyMarket — free forever'}
-        </p>
+            <h1 className={styles.title}>Create Account</h1>
+            <p className={styles.subtitle}>
+              {redirectTo === '/checkout'
+                ? '🔒 One quick step before checkout'
+                : 'Join DailyMarket — free forever'}
+            </p>
 
-        {redirectTo === '/checkout' && (
-          <div className={styles.checkoutBanner}>
-            <strong>Almost there!</strong> Create your free account to complete your purchase and track your orders.
+            {redirectTo === '/checkout' && (
+              <div className={styles.checkoutBanner}>
+                <strong>Almost there!</strong> Create your free account to complete your purchase and track your orders.
+              </div>
+            )}
+
+            <form onSubmit={handleRegister} className={styles.form}>
+              {authMode === 'details' && (
+                <>
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="fullName">Full Name</label>
+                    <input
+                      id="fullName"
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                      placeholder="John Doe"
+                    />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="email">Email Address</label>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="name@example.com"
+                    />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="password">Choose Password</label>
+                    <input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      placeholder="At least 6 characters"
+                      minLength={6}
+                    />
+                  </div>
+                </>
+              )}
+
+              {authMode === 'otp_verify' && (
+                <div className={styles.inputGroup}>
+                  <label htmlFor="otpToken">Enter 6-Digit Code</label>
+                  <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '8px' }}>
+                    Secure pin sent to {email}
+                  </p>
+                  <input
+                    id="otpToken"
+                    type="text"
+                    value={otpToken}
+                    onChange={(e) => setOtpToken(e.target.value)}
+                    required
+                    placeholder="123456"
+                    maxLength={6}
+                    style={{ letterSpacing: '8px', textAlign: 'center', fontSize: '1.5rem', fontWeight: 800 }}
+                  />
+                </div>
+              )}
+
+              {message && (
+                <p className={message.success ? styles.success : styles.error}>
+                  {message.success ? '✅ ' : '⚠️ '} {message.text}
+                </p>
+              )}
+
+              <button type="submit" className={styles.submitBtn} disabled={loading}>
+                {loading ? 'PROCESSING...' : authMode === 'details' ? 'SEND VERIFICATION PIN' : 'VERIFY & CREATE ACCOUNT'}
+              </button>
+            </form>
+
+            <p className={styles.switchAuth}>
+              Already have an account?{' '}
+              <Link href={`/login${redirectTo !== '/' ? `?redirect=${redirectTo}` : ''}`}>
+                Sign in here
+              </Link>
+            </p>
           </div>
-        )}
+        </div>
 
-        <form onSubmit={handleRegister} className={styles.form}>
-          {authMode === 'details' && (
-            <>
-              <div className={styles.inputGroup}>
-                <label htmlFor="fullName">Full Name</label>
-                <input
-                  id="fullName"
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                  placeholder="John Doe"
-                />
-              </div>
-
-              <div className={styles.inputGroup}>
-                <label htmlFor="email">Email Address</label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="name@example.com"
-                />
-              </div>
-              <div className={styles.inputGroup}>
-                <label htmlFor="password">Choose Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="At least 6 characters"
-                  minLength={6}
-                />
-              </div>
-            </>
-          )}
-
-          {authMode === 'otp_verify' && (
-            <div className={styles.inputGroup}>
-              <label htmlFor="otpToken">Enter 6-Digit Code</label>
-              <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: '8px' }}>
-                Secure pin sent to {email}
-              </p>
-              <input
-                id="otpToken"
-                type="text"
-                value={otpToken}
-                onChange={(e) => setOtpToken(e.target.value)}
-                required
-                placeholder="123456"
-                maxLength={6}
-                style={{ letterSpacing: '4px', textAlign: 'center', fontSize: '1.2rem' }}
-              />
-            </div>
-          )}
-
-          {message && (
-            <p className={message.success ? styles.success : styles.error} style={message.success ? { color: '#10b981', padding: '10px', background: '#d1fae5', borderRadius: '4px', textAlign: 'center' } : {}}>{message.text}</p>
-          )}
-
-          <button type="submit" className={styles.submitBtn} disabled={loading}>
-            {loading ? 'PROCESSING...' : authMode === 'details' ? 'SEND VERIFICATION PIN' : 'VERIFY & CREATE ACCOUNT'}
-          </button>
-        </form>
-
-        <p className={styles.switchAuth}>
-          Already have an account?{' '}
-          <Link href={`/login${redirectTo !== '/' ? `?redirect=${redirectTo}` : ''}`}>
-            Sign in here
-          </Link>
-        </p>
+        <div className={styles.imageSide} style={{ backgroundImage: "linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 100%), url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80')" }}>
+          <div className={styles.imageContent}>
+            <h2 style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '1rem', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
+              Your Journey Begins Here.
+            </h2>
+            <p style={{ fontSize: '1.25rem', opacity: 0.9, lineHeight: 1.6, fontWeight: 500 }}>
+              Discover an exclusive selection of natural ingredients, premium meats, and artisan bakery products crafted for those who value quality.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

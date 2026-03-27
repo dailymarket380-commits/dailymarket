@@ -116,24 +116,41 @@
 
 .newsletterForm input {
   padding: 0.75rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  background: var(--surface);
-  color: var(--primary-text);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.07);
+  color: #fff;
+  font-size: 0.875rem;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.newsletterForm input::placeholder {
+  color: rgba(255,255,255,0.35);
+}
+
+.newsletterForm input:focus {
+  border-color: #10b981;
 }
 
 .newsletterForm button {
-  background-color: var(--primary-text);
-  color: var(--background);
+  background: #10b981;
+  color: #fff;
   padding: 0.75rem 1rem;
-  border-radius: 4px;
-  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.2s;
+  font-family: inherit;
 }
 
 .newsletterForm button:hover {
-  background-color: var(--secondary-text);
+  background: #059669;
 }
 
 .bottom {
@@ -141,8 +158,8 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 2rem;
-  border-top: 1px solid var(--border-color);
-  color: var(--faded-text);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.4);
   font-size: 0.75rem;
 }
 
@@ -151,8 +168,14 @@
   gap: 1.5rem;
 }
 
+.legal a {
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
 .legal a:hover {
-  color: var(--primary-text);
+  color: #fff;
 }
 
 @media (max-width: 1024px) {

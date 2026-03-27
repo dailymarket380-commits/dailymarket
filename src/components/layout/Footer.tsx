@@ -58,7 +58,7 @@ export default function Footer() {
               <li><Link href="/sustainability">Sustainability</Link></li>
               <li><Link href="/suppliers">Our Suppliers</Link></li>
               <li><Link href="/login">My Account</Link></li>
-              <li><Link href="/business-portal" style={{ fontWeight: 800, color: '#10b981' }}>🚀 Merchant Portal</Link></li>
+              <li><a href={process.env.NEXT_PUBLIC_BUSINESS_PORTAL_URL || 'http://localhost:3001'} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 800, color: '#10b981' }}>🚀 Merchant Portal</a></li>
             </ul>
           </div>
           <div className={styles.column}>
