@@ -5,7 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import { saveBankDetails } from './actions';
 import Link from 'next/link';
 
-export default function ProfilePage() {
+import { Suspense } from 'react';
+
+function ProfileContent() {
   const searchParams = useSearchParams();
   const vendorName = searchParams.get('vendor') || '';
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -103,5 +105,13 @@ export default function ProfilePage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense fallback={<div>Loading profile...</div>}>
+      <ProfileContent />
+    </Suspense>
   );
 }

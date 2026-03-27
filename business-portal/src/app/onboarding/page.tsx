@@ -16,7 +16,9 @@ const CATEGORIES = [
   { value: 'frozen', label: '🧊 Frozen Foods' },
 ];
 
-export default function OnboardingPage() {
+import { Suspense } from 'react';
+
+function OnboardingContent() {
   const searchParams = useSearchParams();
   const vendorName = searchParams.get('vendor') || '';
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -188,6 +190,14 @@ export default function OnboardingPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense fallback={<div>Loading marketplace asset...</div>}>
+      <OnboardingContent />
+    </Suspense>
   );
 }
 

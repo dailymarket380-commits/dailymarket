@@ -26,7 +26,9 @@ const CAT_COLOR: Record<string, string> = {
   'sweets': '#ffedd5', 'frozen': '#e0f2fe',
 };
 
-export default function ProductsPage() {
+import { Suspense } from 'react';
+
+function ProductsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const vendorName = searchParams.get('vendor') || '';
@@ -205,6 +207,14 @@ export default function ProductsPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div>Loading inventory...</div>}>
+      <ProductsContent />
+    </Suspense>
   );
 }
 
