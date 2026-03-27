@@ -496,9 +496,10 @@ export async function fetchSAProducts(page = 1, pageSize = 400): Promise<Marketp
     return [];
   });
 
-  // 3. Merge and Sort (Local merchants first, then Shopify)
-  // We place local products first to ensure vendor entries are prominently featured
-  const finalProducts = [...localProducts, ...shopifyProducts];
+  // 3. Merge and Sort (Elite fallbacks first, then local merchants, then Shopify)
+  // We place curated fallbacks first (Simba, Nescafé, etc) as requested to ensure 
+  // the Vercel app looks identical to the reliable local view.
+  const finalProducts = [...FALLBACK_PRODUCTS, ...localProducts, ...shopifyProducts];
 
   // 🚀 FALLBACK: If everything is missing (e.g. no internet/secrets), show elite placeholders
   if (finalProducts.length === 0) {
