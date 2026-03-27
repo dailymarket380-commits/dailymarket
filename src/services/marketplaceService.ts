@@ -368,13 +368,13 @@ import { supabase } from '@/lib/supabase';
 
 export async function fetchSAProducts(page = 1, pageSize = 400): Promise<MarketplaceProduct[]> {
   // 🚀 BUILD OPTIMIZATION: Skip fetching from external APIs/DB during Next.js build phase
-  // We detect build phase by checking if we are on Vercel/CI OR using placeholder credentials
-  const isPlaceholder = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('placeholder');
-  const isVercelBuild = process.env.VERCEL === '1' && isPlaceholder;
-  const isCI = !!process.env.CI && isPlaceholder;
+  // We detect build phase by checking if we are on Vercel/CI OR missing Supabase secrets
+  const hasSecrets = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder'));
+  const isVercelLocalBuild = process.env.VERCEL === '1' && !hasSecrets;
+  const isCILocalBuild = !!process.env.CI && !hasSecrets;
   
-  if (isVercelBuild || isCI) {
-     console.log('[Marketplace] Build/CI environment with placeholders detected. Serving fallback products to optimize build.');
+  if (isVercelLocalBuild || isCILocalBuild || !hasSecrets) {
+     console.log('[Marketplace] Build environment with no secrets detected. Serving fallback products.');
      return FALLBACK_PRODUCTS;
   }
 
