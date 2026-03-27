@@ -77,7 +77,14 @@ export function ProductCard({
       <Link href={`/product/${id}`} className={styles.linkWrapper}>
         {/* Image */}
         <div className={styles.imageContainer}>
-          <img src={safeImage} alt={title} className={styles.image} />
+          <img 
+            src={safeImage} 
+            alt={title} 
+            className={styles.image} 
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=600&fit=crop';
+            }}
+          />
         </div>
 
         {/* Content */}

@@ -281,7 +281,7 @@ const FALLBACK_PRODUCTS: MarketplaceProduct[] = [
     premium_price: 189.99,
     unit: 'Pack',
     stock_quantity: 25,
-    image_url: 'https://images.unsplash.com/photo-1603048297172-c9254479895e?w=600&h=600&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&h=600&fit=crop', // High quality dried meat / biltong style
     supplier_id: 'fallback',
     vendor_name: 'The Butcher\'s Block',
     rating: 5.0,
@@ -356,7 +356,7 @@ const FALLBACK_PRODUCTS: MarketplaceProduct[] = [
     premium_price: 59.99,
     unit: 'Bottle',
     stock_quantity: 80,
-    image_url: 'https://images.unsplash.com/photo-1587049352847-4d4e12e2c0e8?w=600&h=600&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1587049352851-86456fa49568?w=600&h=600&fit=crop', // High quality gourmet jar / chutney
     supplier_id: 'fallback',
     vendor_name: 'Mrs Balls Original',
     rating: 5.0,

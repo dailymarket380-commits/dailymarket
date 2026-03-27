@@ -19,7 +19,7 @@ const FEATURE_CARDS = [
   },
   {
     title: 'THE ARTISAN PANTRY',
-    image: 'https://images.unsplash.com/photo-1587049352847-4d4e12e2c0e8?w=600&h=800&fit=crop', /* Beautiful glass pantry jars & staples */
+    image: 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=600&h=800&fit=crop', /* Premium pantry glass jars */
     link: '/shop?category=pantry',
     accent: '#7d6608'
   },
