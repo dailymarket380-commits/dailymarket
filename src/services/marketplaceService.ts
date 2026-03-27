@@ -361,6 +361,51 @@ const FALLBACK_PRODUCTS: MarketplaceProduct[] = [
     vendor_name: 'Mrs Balls Original',
     rating: 5.0,
     reviewCount: 5600
+  },
+  {
+    id: 'fb-9',
+    title: 'Frozen French Fries (2.5kg)',
+    description: 'The classic crispy golden chips. Perfect for the ultimate South African braai side.',
+    category: 'frozen',
+    base_price: 45.00,
+    premium_price: 69.99,
+    unit: 'Bag',
+    stock_quantity: 45,
+    image_url: 'https://cdn.shopify.com/s/files/1/0703/3847/8333/files/FROZENCHIPS.png?v=1773246281',
+    supplier_id: 'fallback',
+    vendor_name: 'Meat Traders',
+    rating: 4.8,
+    reviewCount: 120
+  },
+  {
+    id: 'fb-10',
+    title: 'Premium Multi-Surface Cleaner (750ml)',
+    description: 'Ultra-effective grease-cutting formula for a spotless and sparkling kitchen.',
+    category: 'household-care',
+    base_price: 32.00,
+    premium_price: 48.99,
+    unit: 'Bottle',
+    stock_quantity: 100,
+    image_url: 'https://images.unsplash.com/photo-1584622781564-1d9876a13d00?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'Elite Home',
+    rating: 4.7,
+    reviewCount: 340
+  },
+  {
+    id: 'fb-11',
+    title: 'Rainbow Rose Bouquet (12 Stems)',
+    description: 'Freshly cut, vibrant premium roses to brighten any room or occasion.',
+    category: 'flowers',
+    base_price: 120.00,
+    premium_price: 199.99,
+    unit: 'Bouquet',
+    stock_quantity: 10,
+    image_url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'The Flower Market',
+    rating: 5.0,
+    reviewCount: 88
   }
 ];
 
