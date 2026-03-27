@@ -243,6 +243,36 @@ async function fetchFromStore(store: typeof SHOPIFY_STORES[0], retries = 2): Pro
 
 const FALLBACK_PRODUCTS: MarketplaceProduct[] = [
   {
+    id: 'fb-0',
+    title: 'dmax',
+    description: 'The iconic premium sneaker with optimized air cushioning and elite comfort.',
+    category: 'sweets',
+    base_price: 2500.00,
+    premium_price: 3448.85,
+    unit: 'pair',
+    stock_quantity: 5,
+    image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'My Store',
+    rating: 5.0,
+    reviewCount: 61
+  },
+  {
+    id: 'fb-00',
+    title: 'Cramel icecreat',
+    description: 'Smooth and ultra-creamy artisanal caramel ice cream with a rich toffee swirl.',
+    category: 'dairy',
+    base_price: 85.00,
+    premium_price: 115.00,
+    unit: '2L',
+    stock_quantity: 20,
+    image_url: 'https://images.unsplash.com/photo-1560008511-11c63416e52d?w=600&h=600&fit=crop',
+    supplier_id: 'fallback',
+    vendor_name: 'My Store',
+    rating: 5.0,
+    reviewCount: 61
+  },
+  {
     id: 'fb-1',
     title: 'Kinder Bueno Mini (108g)',
     description: 'Crispy wafer with a creamy hazelnut filling, covered in delicious milk chocolate.',
