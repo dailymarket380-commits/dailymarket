@@ -2,9 +2,14 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "business-portal"
+  ],
   "scripts": {
     "dev": "next dev",
+    "dev:portal": "npm run dev -w business-portal",
     "build": "next build",
+    "build:portal": "npm run build -w business-portal",
     "start": "next start",
     "lint": "eslint"
   },
