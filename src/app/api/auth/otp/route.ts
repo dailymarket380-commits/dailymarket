@@ -3,10 +3,8 @@ import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { supabase } from '@/lib/supabase';
 
-// In-memory store for development. Safe for single-instance Next.js dev server.
-// In a true scalable production, this would use Redis or the vendor_otps table.
-// However, since the user explicitly requested standard local folders for local dev, we will use memory caching.
-const otpCache = new Map<string, { code: string; expiresAt: number }>();
+// Use the persistent vendor_otps table from Supabase for cross-instance reliability.
+// This prevents OTPs from "vanishing" during serverless function cold starts.
 
 function generateDerivedPassword(email: string) {
   return crypto.createHash('sha256').update(email + process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY).digest('hex').substring(0, 16);
@@ -21,8 +19,18 @@ export async function POST(req: NextRequest) {
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes from now
 
-    // 2. Cache it locally
-    otpCache.set(email.toLowerCase(), { code: otpCode, expiresAt });
+    // 2. Persist to DB for cross-instance reliability
+    const { error: dbError } = await supabase
+      .from('vendor_otps')
+      .upsert({ 
+        email: email.toLowerCase(), 
+        otp: otpCode, 
+        verified: false,
+        expires_at: new Date(expiresAt).toISOString(),
+        created_at: new Date().toISOString()
+      }, { onConflict: 'email' });
+
+    if (dbError) throw new Error(`Database persistence failed: ${dbError.message}`);
 
     // 3. Setup Nodemailer explicitly pulling from the .env.local variables the user provided
     const transporter = nodemailer.createTransport({
@@ -69,14 +77,19 @@ export async function PUT(req: NextRequest) {
     const { email, token, password } = await req.json();
     const cleanEmail = email.toLowerCase();
     
-    // 1. Verify the code against our cache
-    const stored = otpCache.get(cleanEmail);
-    if (!stored || stored.code !== token || Date.now() > stored.expiresAt) {
+    // 1. Verify the code against our DB
+    const { data: stored, error: fetchError } = await supabase
+      .from('vendor_otps')
+      .select('*')
+      .eq('email', cleanEmail)
+      .single();
+
+    if (fetchError || !stored || stored.otp !== token || new Date(stored.expires_at).getTime() < Date.now()) {
       return NextResponse.json({ error: 'Invalid or expired code. Please try again.' }, { status: 400 });
     }
 
-    // Clear the code after successful validation
-    otpCache.delete(cleanEmail);
+    // Mark as verified/consumed (optional: delete it instead)
+    await supabase.from('vendor_otps').delete().eq('email', cleanEmail);
 
     // 2. Perform the actual Supabase DB authentication using the provided password or fallback to derived
     const finalPassword = password || generateDerivedPassword(cleanEmail);

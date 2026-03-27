@@ -18,10 +18,20 @@ export async function requestOTP(formData: FormData) {
 
   const otp = generateOTP();
   
+  // Calculate expiry (10 minutes from now)
+  const expires_at = new Date();
+  expires_at.setMinutes(expires_at.getMinutes() + 10);
+  
   // Store the OTP in Supabase
   const { error } = await supabase
     .from('vendor_otps')
-    .upsert({ email, otp, verified: false, created_at: new Date() }, { onConflict: 'email' });
+    .upsert({ 
+      email, 
+      otp, 
+      verified: false, 
+      expires_at: expires_at.toISOString(),
+      created_at: new Date().toISOString()
+    }, { onConflict: 'email' });
 
   if (error) {
     console.error('Error saving OTP:', error);
@@ -62,9 +72,8 @@ export async function verifyOTP(formData: FormData) {
     return { success: false, error: 'Invalid PIN.' };
   }
 
-  // Check if expired (e.g., older than 10 mins)
-  const createdAt = new Date(otpData.created_at).getTime();
-  if (Date.now() - createdAt > 10 * 60 * 1000) {
+  // Check if expired
+  if (new Date(otpData.expires_at).getTime() < Date.now()) {
     return { success: false, error: 'PIN expired. Please request a new one.' };
   }
 
