@@ -510,7 +510,7 @@ export default async function Home() {
         <div className={styles.valueContent}>
           <h2>TURN YOUR PRODUCTS INTO WEALTH</h2>
           <p>Join thousands of South African vendors selling on DailyMarket. You supply, you deliver, we grow together.</p>
-          <Link href="/auth/register?role=supplier" className={styles.heroBtn} style={{ marginTop: '2rem', display: 'inline-block', width: 'fit-content' }}>BECOME A SUPPLIER</Link>
+          <Link href="/register?role=supplier" className={styles.heroBtn} style={{ marginTop: '2rem', display: 'inline-block', width: 'fit-content' }}>BECOME A SUPPLIER</Link>
         </div>
         <div className={styles.valueImage} style={{ backgroundImage: "url('https://images.unsplash.com/photo-1604719312566-f4129e93f1d4?w=1200&h=800&fit=crop')" }} />
       </section>
