@@ -16,7 +16,6 @@ build
 # misc
 .DS_Store
 *.pem
-*.tsbuildinfo
 
 # debug
 npm-debug.log*
@@ -33,10 +32,3 @@ tmp_*
 test_db.js
 test_email.js
 *.txt
-*.json
-!web/package.json
-!web/tsconfig.json
-!web/vercel.json
-!business-portal/package.json
-!package.json
-!*results.json
