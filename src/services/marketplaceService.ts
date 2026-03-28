@@ -12,6 +12,8 @@
  * 4. Multi-vendor attribution (who fulfills the order).
  */
 
+import { supabase } from '@/lib/supabase';
+
 export interface MarketplaceProduct {
   id: string;
   title: string;
@@ -241,216 +243,15 @@ async function fetchFromStore(store: typeof SHOPIFY_STORES[0], retries = 2): Pro
   return [];
 }
 
-const FALLBACK_PRODUCTS: MarketplaceProduct[] = [
-  {
-    id: 'fb-0',
-    title: 'dmax',
-    description: 'The iconic premium sneaker with optimized air cushioning and elite comfort.',
-    category: 'sweets',
-    base_price: 2500.00,
-    premium_price: 3448.85,
-    unit: 'pair',
-    stock_quantity: 5,
-    image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop',
-    supplier_id: 'fallback',
-    vendor_name: 'My Store',
-    rating: 5.0,
-    reviewCount: 61
-  },
-  {
-    id: 'fb-00',
-    title: 'Cramel icecreat',
-    description: 'Smooth and ultra-creamy artisanal caramel ice cream with a rich toffee swirl.',
-    category: 'dairy',
-    base_price: 85.00,
-    premium_price: 115.00,
-    unit: '2L',
-    stock_quantity: 20,
-    image_url: 'https://images.unsplash.com/photo-1560008511-11c63416e52d?w=600&h=600&fit=crop',
-    supplier_id: 'fallback',
-    vendor_name: 'My Store',
-    rating: 5.0,
-    reviewCount: 61
-  },
-  {
-    id: 'fb-1',
-    title: 'Kinder Bueno Mini (108g)',
-    description: 'Crispy wafer with a creamy hazelnut filling, covered in delicious milk chocolate.',
-    category: 'sweets',
-    base_price: 35.50,
-    premium_price: 49.99,
-    unit: 'Bag',
-    stock_quantity: 100,
-    image_url: 'https://cdn.shopify.com/s/files/1/0892/1527/1283/files/IMG-5768.jpg?v=1773401907',
-    supplier_id: 'fallback',
-    vendor_name: 'Simba Snacks',
-    rating: 4.9,
-    reviewCount: 1542
-  },
-  {
-    id: 'fb-2',
-    title: 'Nescafé Classic Instant Coffee (200g)',
-    description: 'The rich and bold taste of the original Nescafé Classic you know and love.',
-    category: 'beverages',
-    base_price: 85.00,
-    premium_price: 119.99,
-    unit: 'Jar',
-    stock_quantity: 50,
-    image_url: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&h=600&fit=crop',
-    supplier_id: 'fallback',
-    vendor_name: 'Nescafé SA',
-    rating: 4.8,
-    reviewCount: 890
-  },
-  {
-    id: 'fb-3',
-    title: 'Original Premium A/B Grade Biltong (250g)',
-    description: 'Hand-cured, traditional South African biltong using the finest cuts of A-grade beef.',
-    category: 'meat-poultry',
-    base_price: 125.00,
-    premium_price: 189.99,
-    unit: 'Pack',
-    stock_quantity: 25,
-    image_url: 'https://cdn.shopify.com/s/files/1/0549/2542/6749/files/FLASHSALEOriginalBiltong_AB_d874ddf7-6a68-4e4f-94ee-c22f32ad0cef.gif?v=1710151495',
-    supplier_id: 'fallback',
-    vendor_name: 'The Butcher\'s Block',
-    rating: 5.0,
-    reviewCount: 420
-  },
-  {
-    id: 'fb-4',
-    title: 'Artisan Sourdough Loaf (800g)',
-    description: 'Stone-ground flour, 24-hour fermented artisan sourdough. Baked fresh daily.',
-    category: 'bakery',
-    base_price: 45.00,
-    premium_price: 64.99,
-    unit: 'Loaf',
-    stock_quantity: 15,
-    image_url: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=600&fit=crop',
-    supplier_id: 'fallback',
-    vendor_name: 'Corner Bakery',
-    rating: 4.7,
-    reviewCount: 230
-  },
-  {
-    id: 'fb-5',
-    title: 'Farm Fresh Hass Avocados (2 Pack)',
-    description: 'Buttery, ripe-and-ready premium avocados from the Limpopo valley.',
-    category: 'fruit-veg',
-    base_price: 35.00,
-    premium_price: 49.99,
-    unit: 'Pack',
-    stock_quantity: 40,
-    image_url: 'https://images.unsplash.com/photo-1523456762203-32d16453664c?w=600&h=600&fit=crop',
-    supplier_id: 'fallback',
-    vendor_name: 'Green Field Farms',
-    rating: 4.6,
-    reviewCount: 110
-  },
-  {
-    id: 'fb-6',
-    title: 'Clover Full Cream Milk (2L)',
-    description: 'Farm fresh milk with that creamy taste you love. High in calcium.',
-    category: 'dairy',
-    base_price: 30.00,
-    premium_price: 44.99,
-    unit: 'Bottle',
-    stock_quantity: 60,
-    image_url: 'https://images.unsplash.com/photo-1528750955925-53f58e2cbaee?w=600&h=600&fit=crop',
-    supplier_id: 'fallback',
-    vendor_name: 'Clover Dairy',
-    rating: 4.9,
-    reviewCount: 2100
-  },
-  {
-    id: 'fb-7',
-    title: 'Red Bull Energy Drink (250ml)',
-    description: 'Wiiings when you need them. Vitalizes body and mind.',
-    category: 'beverages',
-    base_price: 15.00,
-    premium_price: 24.99,
-    unit: 'Can',
-    stock_quantity: 200,
-    image_url: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&h=600&fit=crop',
-    supplier_id: 'fallback',
-    vendor_name: 'Red Bull SA',
-    rating: 4.8,
-    reviewCount: 3400
-  },
-  {
-    id: 'fb-8',
-    title: 'Bolci Dubai Chocolate Gift Tin (200g)',
-    description: 'A luxurious selection of premium Turkish chocolate bars and truffles.',
-    category: 'pantry',
-    base_price: 110.00,
-    premium_price: 159.99,
-    unit: 'Tin',
-    stock_quantity: 80,
-    image_url: 'https://cdn.shopify.com/s/files/1/0492/6462/3766/files/IMG-20260124-WA0047.jpg?v=1772330498',
-    supplier_id: 'fallback',
-    vendor_name: 'Mrs Balls Original',
-    rating: 5.0,
-    reviewCount: 5600
-  },
-  {
-    id: 'fb-9',
-    title: 'Frozen French Fries (2.5kg)',
-    description: 'The classic crispy golden chips. Perfect for the ultimate South African braai side.',
-    category: 'frozen',
-    base_price: 45.00,
-    premium_price: 69.99,
-    unit: 'Bag',
-    stock_quantity: 45,
-    image_url: 'https://cdn.shopify.com/s/files/1/0703/3847/8333/files/FROZENCHIPS.png?v=1773246281',
-    supplier_id: 'fallback',
-    vendor_name: 'Meat Traders',
-    rating: 4.8,
-    reviewCount: 120
-  },
-  {
-    id: 'fb-10',
-    title: 'Premium Multi-Surface Cleaner (750ml)',
-    description: 'Ultra-effective grease-cutting formula for a spotless and sparkling kitchen.',
-    category: 'household-care',
-    base_price: 32.00,
-    premium_price: 48.99,
-    unit: 'Bottle',
-    stock_quantity: 100,
-    image_url: 'https://images.unsplash.com/photo-1584622781564-1d9876a13d00?w=600&h=600&fit=crop',
-    supplier_id: 'fallback',
-    vendor_name: 'Elite Home',
-    rating: 4.7,
-    reviewCount: 340
-  },
-  {
-    id: 'fb-11',
-    title: 'Rainbow Rose Bouquet (12 Stems)',
-    description: 'Freshly cut, vibrant premium roses to brighten any room or occasion.',
-    category: 'flowers',
-    base_price: 120.00,
-    premium_price: 199.99,
-    unit: 'Bouquet',
-    stock_quantity: 10,
-    image_url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=600&h=600&fit=crop',
-    supplier_id: 'fallback',
-    vendor_name: 'The Flower Market',
-    rating: 5.0,
-    reviewCount: 88
-  }
-];
-
-import { supabase } from '@/lib/supabase';
-
 export async function fetchSAProducts(page = 1, pageSize = 400): Promise<MarketplaceProduct[]> {
   // 🚀 BUILD OPTIMIZATION: Skip fetching from external APIs/DB during Next.js build phase
-  // We detect build phase by checking if we are on Vercel/CI OR missing Supabase secrets
   const hasSecrets = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder'));
   const isVercelLocalBuild = process.env.VERCEL === '1' && !hasSecrets;
   const isCILocalBuild = !!process.env.CI && !hasSecrets;
   
   if (isVercelLocalBuild || isCILocalBuild || !hasSecrets) {
-     console.log('[Marketplace] Build environment with no secrets detected. Serving fallback products.');
-     return FALLBACK_PRODUCTS;
+     console.log('[Marketplace] Build environment with no secrets detected. Returning empty list.');
+     return [];
   }
 
   // 1. Fetch from local Supabase DB (Products added via Business Portal)
@@ -496,18 +297,8 @@ export async function fetchSAProducts(page = 1, pageSize = 400): Promise<Marketp
     return [];
   });
 
-  // 3. Merge and Sort (Elite fallbacks first, then local merchants, then Shopify)
-  // We place curated fallbacks first (Simba, Nescafé, etc) as requested to ensure 
-  // the Vercel app looks identical to the reliable local view.
-  const finalProducts = [...FALLBACK_PRODUCTS, ...localProducts, ...shopifyProducts];
-
-  // 🚀 FALLBACK: If everything is missing (e.g. no internet/secrets), show elite placeholders
-  if (finalProducts.length === 0) {
-    console.log('[Marketplace] All feeds empty. Serving high-fidelity fallback products.');
-    return FALLBACK_PRODUCTS;
-  }
-
-  return finalProducts;
+  // 3. Merge (Local merchants first, then Shopify)
+  return [...localProducts, ...shopifyProducts];
 }
 
 export async function fetchProductById(id: string): Promise<MarketplaceProduct | null> {
