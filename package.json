@@ -12,6 +12,7 @@
     "build": "npm run build -w web",
     "build:portal": "npm run build -w business-portal",
     "start": "npm run start -w web",
-    "lint": "npm run lint -w web"
+    "lint": "npm run lint -w web",
+    "install:all": "npm install"
   }
 }

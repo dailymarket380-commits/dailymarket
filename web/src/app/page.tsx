@@ -7,27 +7,23 @@ import styles from './page.module.css';
 const FEATURE_CARDS = [
   {
     title: 'FARM FRESH PRODUCE',
-    image: 'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?w=600&h=800&fit=crop',
-    link: '/shop?category=fruit-veg',
-    accent: '#16a34a'
+    image: 'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?w=1200&q=80',
+    link: '/shop?category=fruit-veg'
   },
   {
     title: 'THE BUTCHERY',
-    image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600&h=800&fit=crop',
-    link: '/shop?category=meat-poultry',
-    accent: '#dc2626'
+    image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=1200&q=80',
+    link: '/shop?category=meat-poultry'
   },
   {
     title: 'ARTISAN PANTRY',
-    image: 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=600&h=800&fit=crop',
-    link: '/shop?category=pantry',
-    accent: '#c5a059'
+    image: 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=1200&q=80',
+    link: '/shop?category=pantry'
   },
   {
     title: 'BAKERY & MEALS',
-    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=800&fit=crop',
-    link: '/shop?category=bakery',
-    accent: '#0a0a0a'
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&q=80',
+    link: '/shop?category=bakery'
   }
 ];
 
@@ -50,14 +46,13 @@ export default async function Home() {
     console.error('[LandingPage] Failed to fetch products:', err);
   }
 
-  // Row selectors
   const getRow = (cat: string, max = 4) => allProducts.filter(p => p.category === cat).slice(0, max);
-  const localRow = allProducts.slice(0, 8); // Now that shopify is gone, these ARE the local products
+  const localRow = allProducts.slice(0, 8);
 
   return (
     <div className={styles.pageContainer}>
       
-      {/* ── Standard Professional Hero ── */}
+      {/* ── High-Contrast Hero Section ── */}
       <section className={styles.heroSection}>
         <div className={styles.heroOverlay}></div>
         <img 
@@ -69,16 +64,13 @@ export default async function Home() {
         <div className="container">
           <div className={styles.heroContent}>
             <span className={styles.heroBadge}>PREMIUM MARKETPLACE DELIVERY</span>
-            <h1 className={styles.heroTitle}>
-              DAILYMARKET <br/>
-              <span className={styles.heroSubtitleText}>Uganda's Premier Delivery Service</span>
-            </h1>
+            <h1 className={styles.heroTitle}>DAILYMARKET</h1>
             <p className={styles.heroSubtitle}>
-              Fresh farm harvests, artisan meats, and daily essentials from local merchants—delivered fresh to your door.
+              Authentic farm produce, artisan meats, and daily essentials from local merchants—delivered with precision.
             </p>
             
             <div className={styles.heroActionRow}>
-              <Link href="/shop" className={styles.primaryBtn}>SHOP THE MARKET</Link>
+              <Link href="/shop" className={styles.primaryBtn}>SHOP NOW</Link>
               <Link href="/register?role=supplier" className={styles.secondaryBtn}>BECOME A SELLER</Link>
             </div>
           </div>
@@ -92,7 +84,8 @@ export default async function Home() {
             {CATEGORIES.map(c => (
               <Link key={c.cat} href={`/shop?category=${c.cat}`} className={styles.categoryCard}>
                 <div className={styles.categoryIcon}>
-                  <img src={c.photo} alt={c.label} />
+                   {/* Using grayscale images and simple UI */}
+                  <img src={c.photo} alt={c.label} style={{ filter: 'grayscale(100%)' }} />
                 </div>
                 <span>{c.label}</span>
               </Link>
@@ -101,63 +94,15 @@ export default async function Home() {
         </div>
       </div>
 
-      {/* ── Merchant Marketplace Section ── */}
-      <section className="container" style={{ padding: '80px 0' }}>
+      {/* ── Latest Products ── */}
+      <section className="container" style={{ padding: '100px 0' }}>
         <div className={styles.sectionHeader}>
-          <div>
-            <h2 className={styles.sectionTitle}>NEW FROM LOCAL MERCHANTS</h2>
-            <p className={styles.sectionSubtitle}>Discover authentic products added by our verified Ugandan vendors.</p>
-          </div>
-          <Link href="/shop" className={styles.viewMoreBtn}>EXPLORE ALL PRODUCTS &rsaquo;</Link>
+          <h2 className={styles.sectionTitle}>FRESH SELECTIONS</h2>
+          <Link href="/shop" className={styles.viewMoreLink}>EXPLORE ALL PRODUCTS &rarr;</Link>
         </div>
         
-        {localRow.length > 0 ? (
-          <div className={styles.productGrid}>
-            {localRow.map(p => (
-              <ProductCard 
-                key={p.id} 
-                id={p.id} 
-                title={p.title} 
-                price={p.premium_price} 
-                imageUrl={p.image_url} 
-                unit={p.unit} 
-                rating={p.rating} 
-                reviewCount={p.reviewCount} 
-                vendorName={p.vendor_name}
-                badge={{ type: 'premium', text: 'LISTED' }}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className={styles.emptyState}>
-            <p>Waiting for merchants to list new products. Be the first to start selling!</p>
-            <Link href="/register?role=supplier" className={styles.primaryBtn}>START SELLING</Link>
-          </div>
-        )}
-      </section>
-
-      {/* ── Feature Highlights ── */}
-      <section className={styles.featureGridSection}>
-        <div className="container">
-          <div className={styles.featureGrid}>
-            {FEATURE_CARDS.map((card, i) => (
-              <Link key={i} href={card.link} className={styles.featureCard}>
-                <img src={card.image} alt={card.title} />
-                <div className={styles.featureOverlay}>
-                   <h3>{card.title}</h3>
-                   <span className={styles.featureLink}>SHOP NOW &rarr;</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Trusted Categories (Produce) ── */}
-      <section className="container" style={{ padding: '80px 0' }}>
-        <h2 className={styles.sectionTitle}>FRESH FARM PRODUCE</h2>
         <div className={styles.productGrid}>
-          {getRow('fruit-veg').map(p => (
+          {localRow.map(p => (
             <ProductCard 
               key={p.id} 
               id={p.id} 
@@ -173,17 +118,31 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Footer Banner ── */}
-      <section className={styles.footerBannerSection}>
+      {/* ── Feature Masonry (Monochrome) ── */}
+      <section className={styles.featureGridSection}>
         <div className="container">
-          <div className={styles.footerBanner}>
-             <div className={styles.footerBannerText}>
-               <h2>READY TO GROW YOUR BUSINESS?</h2>
-               <p>Join thousands of merchant partners selling on DAILYMARKET today.</p>
-               <Link href="/register?role=supplier" className={styles.primaryBtn}>OPEN YOUR STORE</Link>
-             </div>
-             <div className={styles.footerBannerImage} style={{ backgroundImage: "url('https://images.unsplash.com/photo-1604719312566-f4129e93f1d4?w=1200&q=80')" }} />
+          <div className={styles.featureGrid}>
+            {FEATURE_CARDS.map((card, i) => (
+              <Link key={i} href={card.link} className={styles.featureCard}>
+                <img src={card.image} alt={card.title} style={{ filter: 'grayscale(100%)' }} />
+                <div className={styles.featureOverlay}>
+                   <h3>{card.title}</h3>
+                   <span className={styles.featureLink}>EXPLORE CATEGORY &rsaquo;</span>
+                </div>
+              </Link>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Merchant Acquisition Banner ── */}
+      <section className="container">
+        <div className={styles.merchantBanner}>
+           <div className={styles.merchantText}>
+             <h2>SELL ON DAILYMARKET</h2>
+             <p>Scale your local business with our enterprise delivery infrastructure.</p>
+             <Link href="/register?role=supplier" className={styles.primaryBtn}>OPEN YOUR STORE</Link>
+           </div>
         </div>
       </section>
 

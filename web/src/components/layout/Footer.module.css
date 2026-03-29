@@ -1,177 +1,133 @@
 .footer {
-  background-color: #0a0a0a;
-  color: rgba(255,255,255,0.75);
-  margin-top: 8rem;
+  background: black;
+  color: white;
+  padding: 100px 0 60px;
+  border-top: 1px solid #1a1a1a;
 }
 
-/* ── Trust Bar (B.L.A.S.T - Believe) ── */
 .trustBar {
-  background: white;
-  border-top: 4px solid #10b981;
-  border-bottom: 1px solid #f0f0f0;
-  padding: 2rem 0;
+  padding: 40px 0 80px;
+  border-bottom: 2px solid #111;
+  margin-bottom: 80px;
 }
 
 .trustGrid {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
 }
 
 .trustItem {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex: 1;
-  min-width: 160px;
-}
-
-.trustIcon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .trustItem strong {
-  display: block;
-  font-size: 0.78rem;
-  font-weight: 900;
-  color: #1a1a1a;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 1.15rem;
+  letter-spacing: 0.2em;
+  font-weight: 1000;
 }
 
 .trustItem span {
   font-size: 0.7rem;
-  color: #888;
-  line-height: 1.4;
-}
-
-/* Main footer body */
-.footer > div:last-child {
-  padding: 4rem 0 2rem;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  margin-bottom: 3rem;
-}
-
-.column h3 {
-  font-size: 0.75rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-  color: white;
+  opacity: 0.5;
+  font-weight: 800;
   letter-spacing: 0.1em;
 }
 
-.column ul {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+.mainGrid {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 80px;
+  margin-bottom: 100px;
 }
 
-.column a {
-  color: rgba(255,255,255,0.6);
-  font-size: 0.875rem;
-  transition: color 0.2s;
+.logo {
+  font-size: 2.5rem;
+  font-weight: 1000;
+  letter-spacing: -0.05em;
+  margin-bottom: 24px;
 }
 
-.column a:hover {
-  color: #10b981;
+.tagline {
+  font-size: 0.95rem;
+  opacity: 0.6;
+  max-width: 300px;
+  line-height: 1.8;
 }
 
-.column p {
-  color: rgba(255,255,255,0.55);
+.column h3 {
   font-size: 0.85rem;
-  margin-bottom: 1rem;
-  line-height: 1.6;
+  font-weight: 1000;
+  letter-spacing: 0.2em;
+  margin-bottom: 32px;
+  color: #a0a0a0;
+  text-transform: uppercase;
 }
 
-.socialRow {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  font-size: 1.3rem;
-}
-
-.socialRow a {
-  text-decoration: none;
-  transition: transform 0.2s;
-  display: inline-block;
-}
-
-.socialRow a:hover {
-  transform: scale(1.2);
-}
-
-.newsletterForm {
+.column ul {
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 16px;
 }
 
-.newsletterForm input {
-  padding: 0.75rem 1rem;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px;
-  background: rgba(255,255,255,0.07);
-  color: #fff;
-  font-size: 0.875rem;
-  outline: none;
-  font-family: inherit;
-  transition: border-color 0.2s;
+.column ul li a {
+  font-size: 0.75rem;
+  font-weight: 1000;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
 }
 
-.newsletterForm input::placeholder {
-  color: rgba(255,255,255,0.35);
+.column ul li a:hover {
+  opacity: 1;
 }
 
-.newsletterForm input:focus {
-  border-color: #10b981;
+.newsletter {
+  display: flex;
+  margin-top: 24px;
+  background: #111;
+  padding: 4px;
+  border-radius: var(--radius-full);
+  border: 1px solid #222;
 }
 
-.newsletterForm button {
-  background: #10b981;
-  color: #fff;
-  padding: 0.75rem 1rem;
+.newsletter input {
+  flex: 1;
+  background: transparent;
   border: none;
-  border-radius: 8px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  cursor: pointer;
+  padding-left: 20px;
+  color: white;
   font-size: 0.8rem;
-  transition: background 0.2s;
-  font-family: inherit;
+  font-weight: 800;
+  outline: none;
 }
 
-.newsletterForm button:hover {
-  background: #059669;
+.newsletter button {
+  background: white;
+  color: black;
+  padding: 12px 30px;
+  border-radius: var(--radius-full);
+  font-weight: 1000;
+  font-size: 0.75rem;
 }
 
 .bottom {
+  border-top: 1px solid #111;
+  padding-top: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.4);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
+  color: #444;
+  font-weight: 1000;
+  letter-spacing: 0.05em;
 }
 
 .legal {
   display: flex;
-  gap: 1.5rem;
-}
-
-.legal a {
-  color: rgba(255,255,255,0.4);
-  text-decoration: none;
-  transition: color 0.2s;
+  gap: 30px;
 }
 
 .legal a:hover {
@@ -179,21 +135,12 @@
 }
 
 @media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .mainGrid { grid-template-columns: 1fr 1fr; gap: 60px; }
+  .logo { font-size: 2rem; }
 }
 
-@media (max-width: 640px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  .bottom {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-  .footer {
-    display: none; /* Hide huge desktop footer entirely on mobile apps */
-  }
+@media (max-width: 768px) {
+  .trustGrid { grid-template-columns: 1fr 1fr; gap: 30px; }
+  .mainGrid { grid-template-columns: 1fr; gap: 60px; }
+  .bottom { flex-direction: column; gap: 24px; text-align: center; }
 }
