@@ -1,0 +1,32 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "business-portal"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "dev:portal": "npm run dev -w business-portal",
+    "build": "next build",
+    "build:portal": "npm run build -w business-portal",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.99.2",
+    "next": "15.1.9",
+    "nodemailer": "^8.0.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/nodemailer": "^7.0.11",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.9",
+    "typescript": "^5"
+  }
+}
