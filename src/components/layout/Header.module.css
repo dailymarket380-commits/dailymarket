@@ -1,277 +1,147 @@
 .header {
-  background: white;
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  box-shadow: var(--shadow);
+  transition: var(--transition-smooth);
+  border-bottom: 1px solid transparent;
+  background-color: transparent;
+  color: white; /* Contrast for hero section */
 }
 
-@media (max-width: 768px) {
-  .homeHeader {
-    display: none !important;
-  }
+.scrolled {
+  background: white !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-md);
+  padding: 8px 0;
 }
 
-.topHeader {
-  border-bottom: 1px solid var(--border-light);
-  padding: 1rem 0;
+.notHome {
+  background: white;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  color: var(--text-primary);
+  padding: 12px 0;
 }
 
-.topHeaderContent {
+.topBar {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.scrolled .topBar {
+  border-bottom-color: var(--border-medium);
+}
+
+.topBarContent {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 40px;
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: 900;
-  color: black;
-  letter-spacing: 0.2em; /* Elite spacing */
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: inherit;
 }
 
-.headerActions {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
+.searchArea {
+  flex: 1;
+  max-width: 600px;
 }
 
-.actionBtn {
+.actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 24px;
+}
+
+.accountMenu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  text-transform: none;
+  font-weight: 700;
 }
 
-.actionBtn svg {
-  width: 20px;
-  height: 20px;
+.accountMenu button {
+  text-decoration: underline;
+  font-size: 0.75rem;
+  color: var(--accent-red);
 }
 
-.actionBtn:hover {
+.authLink {
+  font-weight: 800;
+  font-size: 0.85rem;
+  background: var(--brand-orange);
+  color: white !important;
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
+}
+
+.cartIcon {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--primary-faded);
+  cursor: pointer;
+}
+
+.cartIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: var(--brand-orange);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 900;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.navigation {
+  padding: 12px 0;
+  display: block;
+}
+
+.navigation .navLinks {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+.navigation .navLinks a {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.navigation .navLinks a:hover {
+  opacity: 1;
   color: var(--brand-orange);
 }
 
-.signUpBtn {
-  display: flex;
-  align-items: center;
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: white;
-  background: #10b981;
-  padding: 0.5rem 1.25rem;
-  border-radius: 50px;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.2s;
-}
-
-.signUpBtn:hover {
-  background: #059669;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
-/* ── User Auth Menu ── */
-.userMenu {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.userGreeting {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  white-space: nowrap;
-}
-
-.signOutBtn {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--accent-red);
-  background: none;
-  border: 1px solid var(--accent-red);
-  border-radius: 4px;
-  padding: 0.3rem 0.8rem;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: all 0.2s;
-}
-
-.signOutBtn:hover {
-  background: var(--accent-red);
-  color: white;
-}
-
-
-.cartBtn {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.cartBtn svg {
-  width: 24px;
-  height: 24px;
-  color: black;
-}
-
-.bottomHeader {
-  padding: 0.75rem 0;
-}
-
-.navContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navLinks {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.navLinks a {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.navLinks a:hover {
-  color: var(--accent-gold);
-}
-
-.navLinks a svg {
-  width: 14px;
-  height: 14px;
-}
-
-.searchBar {
-  display: flex;
-  align-items: center;
-  background: #f5f5f5;
-  border: 1px solid transparent;
-  border-radius: 50px;
-  padding: 0.6rem 1.25rem;
-  width: 300px;
-  transition: all 0.2s ease;
-}
-
-.searchBar:focus-within {
-  background: white;
-  border-color: #1a1a1a;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-.searchBar svg {
-  width: 18px;
-  height: 18px;
-  color: var(--text-muted);
-  margin-right: 0.75rem;
-}
-
-.searchBar input {
-  border: none;
-  background: transparent;
-  width: 100%;
-  font-size: 0.9rem;
-  outline: none;
-  font-family: inherit;
-}
-
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .topHeaderContent {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 0;
-  }
-  
-  .logo {
-    font-size: 1.2rem;
-  }
-  
-  .headerActions {
-    flex-wrap: nowrap;
-    gap: 1rem;
-  }
-  
-  /* Hide the text for these buttons, only show icon */
-  .actionBtn {
-    font-size: 0;
-  }
-  .actionBtn svg {
-    width: 24px;
-    height: 24px;
-    color: black;
-  }
-  
-  .userGreeting {
-    display: none;
-  }
-  .signOutBtn {
-    padding: 0.2rem 0.5rem;
-    font-size: 0.65rem;
-  }
-  
-  .navContainer {
-    flex-direction: column-reverse;
-    gap: 0.5rem;
-    width: 100%;
-  }
-  
-  .searchBar {
-    width: 100%;
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
-  }
-  
-  /* Make bottom links swipeable like a native app menu tab */
-  .navLinks {
-    display: flex;
-    overflow-x: auto;
-    width: 100%;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    gap: 1.5rem;
-    padding-bottom: 0.5rem;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
-  .navLinks::-webkit-scrollbar {
-    display: none;
-  }
-  .navLinks a {
-    white-space: nowrap;
-    font-size: 0.75rem;
-  }
-}
-.magicSearchRow {
-  flex: 1;
-  max-width: 480px;
-  margin-left: 3rem;
-}
-
-@media (max-width: 1024px) {
-  .magicSearchRow {
-    margin-left: 1.5rem;
-    max-width: 300px;
-  }
-}
-
-@media (max-width: 768px) {
-  .magicSearchRow {
-    display: none;
-  }
+  .logo { font-size: 1.25rem; }
+  .searchArea { display: none; }
+  .navigation { display: none; }
 }
