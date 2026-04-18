@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function EFTUploadPage() {
+function EFTContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const orderId = searchParams.get('order') || '';
@@ -161,5 +161,13 @@ export default function EFTUploadPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function EFTUploadPage() {
+  return (
+    <Suspense fallback={<div style={{ padding: '100px 20px', textAlign: 'center', color: '#64748b' }}>Loading...</div>}>
+      <EFTContent />
+    </Suspense>
   );
 }
