@@ -275,35 +275,93 @@
 }
 
 @media (max-width: 768px) {
-  .detailLayout { padding-top: 0; }
-  .breadcrumbs { margin: 1rem 0; font-size: 0.75rem; }
-  .mainContent { margin-bottom: 0; }
-  .mainImageContainer { 
-    border-radius: 0; 
-    border-left: none; 
-    border-right: none; 
-    margin-left: -16px; 
-    margin-right: -16px; 
-    width: calc(100% + 32px); 
-    background: #ffffff;
+  .detailLayout { 
+    padding-top: 0;
+    padding-left: 16px;
+    padding-right: 16px;
   }
-  .title { font-size: 1.5rem; }
-  .price { font-size: 1.75rem; }
-  
-  /* The ultimate Checkers 60 / Woolworths Food mobile cart UX */
+
+  .breadcrumbs { 
+    margin: 1rem 0; 
+    font-size: 0.75rem; 
+  }
+
+  .mainContent { 
+    margin-bottom: 0;
+    gap: 1.25rem;
+  }
+
+  /* Full-bleed image on mobile */
+  .mainImageContainer { 
+    border-radius: 16px;
+    background: #f8fafc;
+    aspect-ratio: 1;
+  }
+
+  .title { 
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .brand {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .ratingRow {
+    margin-bottom: 1rem;
+  }
+
+  .price { 
+    font-size: 1.75rem; 
+  }
+
+  .priceBox {
+    margin-bottom: 1rem;
+  }
+
+  /* Stack Add to Cart controls full width */
+  .purchaseControls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .quantityStepper {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stepperBtn {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* Sticky Add to Cart bar above BottomNav */
   .stickyCartBar {
     position: fixed;
     bottom: 65px; /* Above BottomNav */
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.97);
     backdrop-filter: blur(10px);
-    padding: 1rem;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
+    padding: 12px 16px;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.08);
     z-index: 100;
     margin-bottom: 0;
-    border-top: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid rgba(0,0,0,0.06);
   }
-  
-  .description { margin-bottom: 6rem; /* Make room for sticky bar */ }
+
+  .stockAvailability {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .description { 
+    margin-bottom: 7rem; /* Room for sticky bar + bottom nav */
+    padding-top: 1.25rem;
+  }
+
+  .description h3 {
+    font-size: 0.85rem;
+  }
 }

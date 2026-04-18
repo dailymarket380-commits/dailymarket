@@ -57,7 +57,7 @@
 }
 
 .contactCard:hover {
-  border-color: #f97316;
+  border-color: #111111;
   box-shadow: 0 4px 16px rgba(249,115,22,0.1);
 }
 
@@ -86,7 +86,7 @@
 .contactCard a {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #f97316;
+  color: #111111;
 }
 
 /* Section title */
@@ -129,7 +129,7 @@
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  color: #f97316;
+  color: #111111;
 }
 
 .faqAnswer {
@@ -193,7 +193,7 @@
 .inputGroup input:focus,
 .inputGroup select:focus,
 .inputGroup textarea:focus {
-  border-color: #f97316;
+  border-color: #111111;
   box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
 }
 
@@ -212,7 +212,7 @@
 }
 
 .submitBtn:hover {
-  background: #f97316;
+  background: #111111;
 }
 
 /* Success */

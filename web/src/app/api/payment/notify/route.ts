@@ -99,6 +99,13 @@ export async function POST(req: NextRequest) {
         .update({ status: 'processing' })
         .eq('id', orderId);
 
+      // Synchonize business portal orders
+      const shortRef = orderId.substring(0, 8).toUpperCase();
+      await supabase
+        .from('seller_orders')
+        .update({ status: 'completed' })
+        .eq('order_ref', shortRef);
+
       if (updateError) {
         console.error('[DB] Failed to update order status:', updateError);
         // We still return 200 OK to PayFast to stop retries, as we've logged the success

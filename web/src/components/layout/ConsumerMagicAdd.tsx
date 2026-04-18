@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import { fetchSAProducts } from '@/services/marketplaceService';
+import { useRouter } from 'next/navigation';
 import styles from './ConsumerMagicAdd.module.css';
 
 export function ConsumerMagicAdd() {
@@ -10,6 +11,7 @@ export function ConsumerMagicAdd() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [status, setStatus] = useState('');
   const { addToCart, setIsCartOpen } = useCart();
+  const router = useRouter();
 
   const handleMagicAdd = async () => {
     if (!input.trim()) return;
@@ -34,29 +36,10 @@ export function ConsumerMagicAdd() {
         p.vendor_name?.toLowerCase().includes(searchTerm)
       );
 
-      if (match) {
-        setStatus(`Added ${quantity}x ${match.title}!`);
-        for (let i = 0; i < quantity; i++) {
-          addToCart({
-            id: match.id,
-            title: match.title,
-            price: match.premium_price,
-            imageUrl: match.image_url,
-            vendorName: match.vendor_name
-          });
-        }
-        
-        if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
-        setIsCartOpen(true);
-        
-        setTimeout(() => {
-          setInput('');
-          setStatus('');
-        }, 3000);
-      } else {
-        setStatus('Could not find that exact product.');
-        setTimeout(() => setStatus(''), 3000);
-      }
+      // Always go to search results so user can browse + add to cart
+      router.push(`/search?q=${encodeURIComponent(input.trim())}`);
+      setInput('');
+      setStatus('');
     } catch (error) {
       setStatus('Search failed. Try again?');
     } finally {
@@ -72,7 +55,7 @@ export function ConsumerMagicAdd() {
         </div>
         <input 
           type="text" 
-          placeholder='Try "Add 2 Ugandan Coffee"...' 
+          placeholder='Search products, vendors, categories...' 
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleMagicAdd()}
@@ -83,7 +66,7 @@ export function ConsumerMagicAdd() {
           disabled={isProcessing || !input.trim()}
           className={styles.magicBtn}
         >
-          {isProcessing ? '✨' : 'ADD TO CART'}
+          {isProcessing ? '⟳' : 'SEARCH'}
         </button>
       </div>
       {status && <div className={styles.status}>{status}</div>}

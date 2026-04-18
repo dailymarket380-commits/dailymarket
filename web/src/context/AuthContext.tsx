@@ -28,15 +28,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    // Get current session on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.warn('[AuthContext] Session fetch error (could be an invalid refresh token). Clearing session.', error.message);
+        // We can ignore the error, just means user isn't logged in correctly anymore
+        if (typeof window !== 'undefined') {
+          try {
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key && key.startsWith('sb-') && key.endsWith('-auth-token')) {
+                localStorage.removeItem(key);
+              }
+            }
+          } catch (e) {}
+        }
+      }
       setUser(session?.user ?? null);
+      setLoading(false);
+    }).catch(err => {
+      console.warn('[AuthContext] Unhandled session fetch exception:', err);
+      setUser(null);
       setLoading(false);
     });
 
     // Listen for auth state changes (login, logout, token refresh)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        setUser(null);
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('dailymarket_cart');
+        }
+      } else if (event === 'TOKEN_REFRESHED') {
+        setUser(session?.user ?? null);
+      } else {
+        setUser(session?.user ?? null);
+      }
       setLoading(false);
     });
 
@@ -48,6 +74,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await supabase.auth.signOut();
     }
     setUser(null);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('dailymarket_cart');
+    }
   };
 
   return (

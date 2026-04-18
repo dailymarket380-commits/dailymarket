@@ -79,7 +79,7 @@ function PaymentSuccessContent() {
           <Link href="/" style={{ background: '#1a1a1a', color: 'white', padding: '1rem 2rem', fontWeight: 900, borderRadius: '6px', fontSize: '0.9rem', textTransform: 'uppercase' }}>
             🛍️ Continue Shopping
           </Link>
-          <Link href="/support" style={{ background: 'transparent', color: '#f97316', padding: '1rem 2rem', fontWeight: 900, border: '2px solid #f97316', borderRadius: '6px', fontSize: '0.9rem', textTransform: 'uppercase' }}>
+          <Link href="/support" style={{ background: 'transparent', color: '#111111', padding: '1rem 2rem', fontWeight: 900, border: '2px solid #111111', borderRadius: '6px', fontSize: '0.9rem', textTransform: 'uppercase' }}>
             💬 Need Help?
           </Link>
         </div>

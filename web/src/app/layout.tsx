@@ -20,10 +20,6 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
     title: 'DailyMarket',
   },
-  icons: {
-    icon: '/icon.svg',
-    apple: '/icon.svg',
-  },
 };
 
 export const viewport: Viewport = {

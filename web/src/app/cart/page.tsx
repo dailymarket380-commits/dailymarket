@@ -9,6 +9,16 @@ import Link from 'next/link';
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, subtotal, totalItems } = useCart();
   const { user } = useAuth();
+  
+  // Tiered Delivery Pricing (matches checkout logic)
+  const shippingFee = subtotal >= 500 || subtotal === 0 
+    ? 0 
+    : subtotal < 100 
+      ? 15.00 
+      : subtotal < 250 
+        ? 25.00 
+        : 35.00;
+  const grandTotal = subtotal + shippingFee;
 
   if (cart.length === 0) {
     return (
@@ -60,11 +70,15 @@ export default function CartPage() {
           </div>
           <div className={styles.summaryRow}>
             <span>SHIPPING</span>
-            <span style={{ color: 'var(--accent-green)', fontWeight: 800 }}>FREE</span>
+            {shippingFee === 0 ? (
+              <span style={{ color: 'var(--accent-green)', fontWeight: 800 }}>FREE (Over R500)</span>
+            ) : (
+              <span>R {shippingFee.toFixed(2)}</span>
+            )}
           </div>
           <div className={styles.totalRow}>
             <span>TOTAL</span>
-            <span>R {subtotal.toFixed(2)}</span>
+            <span>R {grandTotal.toFixed(2)}</span>
           </div>
 
           {user ? (

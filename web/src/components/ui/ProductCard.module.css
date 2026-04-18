@@ -1,22 +1,24 @@
 .premiumCard {
-  background: #111;
-  border: 1px solid #222;
-  border-radius: var(--radius-md);
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
   overflow: hidden;
-  transition: all 0.4s var(--transition-smooth);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
 }
 
 .premiumCard:hover {
-  transform: translateY(-8px);
-  border-color: #fff;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  transform: translateY(-4px);
+  border-color: #d0d0d0;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
 }
 
 .imageBox {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 5;
-  background: #111;
+  aspect-ratio: 1 / 1;
+  background: #f9f9f9;
   overflow: hidden;
 }
 
@@ -25,30 +27,29 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.8s ease;
-  filter: grayscale(100%);
 }
 
 .premiumCard:hover .image {
-  transform: scale(1.05);
-  filter: grayscale(0%); /* Highlight on hover! */
+  transform: scale(1.03);
 }
 
 .cartQuickBtn {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 52px;
-  height: 52px;
-  background: white;
-  color: black;
+  bottom: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  background: #000000;
+  color: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   opacity: 0;
   transform: translateY(10px);
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  z-index: 10;
 }
 
 .premiumCard:hover .cartQuickBtn {
@@ -57,34 +58,37 @@
 }
 
 .cartQuickBtn:hover {
-  background: #f0f0f0;
-  transform: scale(1.1);
+  background: #333333;
+  transform: scale(1.05);
 }
 
-.cartQuickBtn svg { width: 20px; height: 20px; }
+.cartQuickBtn svg { width: 18px; height: 18px; }
 
 .isAdded {
-  background: #00ff00 !important;
-  color: black !important;
+  background: #16a34a !important;
+  color: white !important;
   opacity: 1 !important;
   transform: translateY(0) !important;
 }
 
 .content {
-  padding: 24px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .vendorRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .vendor {
-  font-size: 0.7rem;
-  font-weight: 1000;
-  color: #a0a0a0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #555555;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -92,43 +96,92 @@
 .rating {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 
 .rating svg {
-  width: 10px;
-  color: #fff;
+  width: 12px;
+  color: #c5a059;
 }
 
 .rating span {
   font-size: 0.75rem;
-  font-weight: 800;
-  color: #fff;
+  font-weight: 700;
+  color: #555;
 }
 
 .title {
-  font-size: 1.25rem;
-  font-weight: 1000;
-  margin-bottom: 16px;
-  height: 2.5em;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  color: #fff;
+  text-overflow: ellipsis;
+  flex: 1;
 }
 
 .priceRow {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+.prices {
+  display: flex;
+  flex-direction: column;
 }
 
 .currentPrice {
-  font-size: 1.25rem;
-  font-weight: 1000;
-  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #000000;
+}
+
+.oldPrice {
+  font-size: 0.8rem;
+  text-decoration: line-through;
+  color: #999;
+  font-weight: 500;
 }
 
 .unit {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #888;
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
   font-weight: 800;
-  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 5;
+}
+
+.badge.premium {
+  background: #c5a059;
+  color: #fff;
+}
+
+.badge.save {
+  background: #cc0000;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .cartQuickBtn {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

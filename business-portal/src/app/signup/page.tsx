@@ -1,67 +1,156 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { requestOTP, verifyOTP } from '../login/actions';
+
+type Step = 'details' | 'otp';
 
 export default function SignupPage() {
   const router = useRouter();
-  const [step, setStep] = useState<'form' | 'otp'>('form');
-  const [email, setEmail] = useState('');
-  const [businessName, setBusinessName] = useState('');
+  const [step, setStep] = useState<Step>('details');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [message, setMessage] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
-  async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault(); setIsSubmitting(true); setMessage('');
-    const formData = new FormData(e.currentTarget);
-    setEmail(formData.get('email') as string);
-    setBusinessName(formData.get('businessName') as string);
-    const result = await requestOTP(formData);
+  // Form data held in state so OTP step can reuse it
+  const [formData, setFormData] = useState({ businessName: '', email: '', password: '' });
+
+  // OTP digits (6 boxes)
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const inp: React.CSSProperties = { width: '100%', background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: 10, padding: '14px 18px', color: '#0f172a', fontSize: '15px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' };
+  const lbl: React.CSSProperties = { display: 'block', fontSize: '13px', fontWeight: 700, color: '#64748b', marginBottom: 8, letterSpacing: '0.02em' };
+  const btn: React.CSSProperties = { width: '100%', background: '#0f172a', color: '#fff', border: 'none', borderRadius: 10, padding: '16px', fontWeight: 800, fontSize: '15px', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 };
+
+  // ─── Step 1: Submit details & request OTP ──────────────────────────────────
+  async function handleDetailsSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setMessage('');
+
+    const fd = new FormData(e.currentTarget);
+    const data = {
+      businessName: (fd.get('businessName') as string).trim(),
+      email: (fd.get('email') as string).trim().toLowerCase(),
+      password: fd.get('password') as string,
+    };
+
+    if (data.password.length < 6) {
+      setMessage('Password must be at least 6 characters.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    const res = await fetch('/api/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: data.email }),
+    });
+    const result = await res.json();
+
     setIsSubmitting(false);
-    if (result.success) setStep('otp'); else setMessage(result.error || 'Failed to send PIN.');
+
+    if (!result.success) {
+      setMessage(result.error || 'Failed to send verification code.');
+      return;
+    }
+
+    setFormData(data);
+    setSuccessMsg(`A 6-digit code was sent to ${data.email}`);
+    setStep('otp');
   }
 
-  async function handleOTPSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault(); setIsSubmitting(true); setMessage('');
-    const formData = new FormData(e.currentTarget);
-    formData.append('email', email);
-    formData.append('businessName', businessName); 
-    const result = await verifyOTP(formData);
-    setIsSubmitting(false);
-    if (result.success) router.push(`/products?vendor=${encodeURIComponent(result.vendor as string)}`);
-    else setMessage(result.error || 'Invalid PIN.');
+  // ─── OTP digit input handler ───────────────────────────────────────────────
+  function handleOtpChange(index: number, value: string) {
+    if (!/^\d*$/.test(value)) return;
+    const next = [...otp];
+    next[index] = value.slice(-1);
+    setOtp(next);
+    if (value && index < 5) otpRefs.current[index + 1]?.focus();
   }
 
-  const inp: React.CSSProperties = { width: '100%', background: '#fff', border: '1.5px solid var(--border)', borderRadius: 10, padding: '14px 18px', color: 'var(--text-main)', fontSize: '15px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border-color 0.2s, box-shadow 0.2s' };
-  const lbl: React.CSSProperties = { display: 'block', fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: 8, letterSpacing: '0.02em' };
-  const btn: React.CSSProperties = { background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%)', color: '#fff', border: 'none', borderRadius: 10, padding: '16px', fontWeight: 800, fontSize: '15px', cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 4px 12px rgba(249,115,22,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 };
+  function handleOtpKeyDown(index: number, e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      otpRefs.current[index - 1]?.focus();
+    }
+  }
+
+  // ─── Step 2: Verify OTP & create account ──────────────────────────────────
+  async function handleOtpSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const code = otp.join('');
+    if (code.length < 6) {
+      setMessage('Please enter all 6 digits.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMessage('');
+
+    const res = await fetch('/api/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: formData.email, otp: code, password: formData.password, businessName: formData.businessName }),
+    });
+    const result = await res.json();
+
+    setIsSubmitting(false);
+
+    if (!result.success) {
+      setMessage(result.error || 'Verification failed.');
+      return;
+    }
+
+    router.push(`/products`);
+  }
+
+  // ─── Resend OTP ─────────────────────────────────────────────────────────────
+  async function handleResend() {
+    setIsSendingOtp(true);
+    setMessage('');
+    const res = await fetch('/api/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: formData.email }),
+    });
+    const result = await res.json();
+    setIsSendingOtp(false);
+    if (result.success) {
+      setSuccessMsg('A new code has been sent to your email.');
+      setOtp(['', '', '', '', '', '']);
+      otpRefs.current[0]?.focus();
+    } else {
+      setMessage(result.error || 'Failed to resend code.');
+    }
+  }
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--background)', color: 'var(--text-main)' }}>
-      {/* Premium Header */}
-      <div style={{ background: '#fff', borderBottom: '1px solid var(--border)', padding: '0 40px', display: 'flex', alignItems: 'center', height: 72, position: 'sticky', top: 0, zIndex: 100 }}>
+    <main style={{ minHeight: '100vh', background: '#f8fafc', color: '#0f172a' }}>
+      {/* Header */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #e2e8f0', padding: '0 40px', display: 'flex', alignItems: 'center', height: 72, position: 'sticky', top: 0, zIndex: 100 }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
-          <div style={{ background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)', color: '#fff', fontWeight: 900, fontSize: '20px', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 10, boxShadow: '0 4px 12px rgba(249,115,22,0.3)' }}>DM</div>
+          <div style={{ background: '#0f172a', color: '#fff', fontWeight: 900, fontSize: '20px', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 10 }}>DM</div>
           <div>
             <div style={{ fontWeight: 800, fontSize: '18px', color: '#0f172a', letterSpacing: '-0.5px' }}>DailyMarket</div>
-            <div style={{ fontSize: '10px', color: '#f97316', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>SELLER CENTER</div>
+            <div style={{ fontSize: '10px', color: '#64748b', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>SELLER CENTER</div>
           </div>
         </Link>
       </div>
 
       <div style={{ maxWidth: 1100, margin: '60px auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 40, alignItems: 'center' }}>
-        {/* Left Side: Brand Value */}
+        {/* Left Side */}
         <div style={{ padding: '20px' }}>
-          <div style={{ display: 'inline-flex', padding: '6px 14px', background: '#fff7ed', borderRadius: 30, fontSize: '12px', fontWeight: 800, color: '#f97316', marginBottom: 24, border: '1px solid #fed7aa' }}>
-            🚀 NOW FEATURING 3 MONTHS FREE
+          <div style={{ display: 'inline-flex', padding: '6px 14px', background: '#f1f5f9', borderRadius: 30, fontSize: '12px', fontWeight: 800, color: '#0f172a', marginBottom: 24, border: '1px solid #e2e8f0' }}>
+            🚀 3 MONTHS FREE — NO CREDIT CARD
           </div>
           <h1 style={{ fontSize: '52px', fontWeight: 900, lineHeight: 1.05, letterSpacing: '-2px', marginBottom: 24, color: '#0f172a' }}>
-            Scale your store with <span style={{ color: '#f97316' }}>DailyMarket</span> Premium
+            Grow your store with <span style={{ color: '#0f172a', textDecoration: 'underline' }}>DailyMarket</span>
           </h1>
           <p style={{ color: '#64748b', fontSize: '18px', lineHeight: 1.6, marginBottom: 40, maxWidth: 480 }}>
-            Join South Africa's most elite vendor network. We handle the logistics, you focus on your craft.
+            Join South Africa&apos;s most elite vendor network. We handle the logistics, you focus on your craft.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
@@ -78,70 +167,115 @@ export default function SignupPage() {
               </div>
             ))}
           </div>
-
-          <div style={{ marginTop: 48, display: 'flex', alignItems: 'center', gap: 16 }}>
-             <div style={{ display: 'flex', marginLeft: 10 }}>
-                {[1,2,3,4].map(x => <div key={x} style={{ width: 32, height: 32, borderRadius: '50%', border: '3px solid #fff', background: '#e2e8f0', marginLeft: -10 }}></div>)}
-             </div>
-             <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Join <strong>2,400+ vendors</strong> across SA</div>
-          </div>
         </div>
 
-        {/* Right Side: Enhanced Signup Form */}
+        {/* Right Side: Form */}
         <div className="premium-card" style={{ padding: '48px 40px' }}>
-          {step === 'form' ? (
+          {step === 'details' ? (
             <>
               <h2 style={{ fontSize: '28px', fontWeight: 900, letterSpacing: '-1px', marginBottom: 8, color: '#0f172a' }}>Create your storefront</h2>
-              <p style={{ color: '#64748b', fontSize: '15px', marginBottom: 32 }}>Secure your first 3 months of premium listing for free.</p>
-              
-              <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <p style={{ color: '#64748b', fontSize: '15px', marginBottom: 32 }}>Free for 3 months. No credit card required.</p>
+
+              <form onSubmit={handleDetailsSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <div>
                   <label style={lbl} htmlFor="businessName">Store / Business Name</label>
                   <input id="businessName" name="businessName" type="text" required style={inp} placeholder="e.g. Unity Cash & Carry" />
                 </div>
                 <div>
                   <label style={lbl} htmlFor="email">Work Email</label>
-                  <input id="email" name="email" type="email" required style={inp} placeholder="you@business.com" />
+                  <input id="email" name="email" type="email" required autoComplete="email" style={inp} placeholder="you@business.com" />
+                </div>
+                <div>
+                  <label style={lbl} htmlFor="password">Create Password</label>
+                  <input id="password" name="password" type="password" required minLength={6} autoComplete="new-password" style={inp} placeholder="Min. 6 characters" />
                 </div>
 
                 <div style={{ display: 'flex', gap: 14, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: '16px', alignItems: 'flex-start' }}>
-                  <input type="checkbox" id="terms" name="terms" required style={{ accentColor: '#f97316', width: 18, height: 18, marginTop: 2, flexShrink: 0 }} />
+                  <input type="checkbox" id="terms" name="terms" required style={{ width: 18, height: 18, marginTop: 2, flexShrink: 0 }} />
                   <label htmlFor="terms" style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.6, cursor: 'pointer' }}>
-                    I agree to the <Link href="/terms" style={{ color: '#f97316', textDecoration: 'none', fontWeight: 700 }} target="_blank">Merchant Agreement</Link>. After trial, a monthly fee of R120 applies.
+                    I agree to the <Link href="/terms" style={{ color: '#0f172a', textDecoration: 'underline', fontWeight: 700 }} target="_blank">Merchant Agreement</Link>. After trial, a monthly fee of R120 applies.
                   </label>
                 </div>
 
                 <button type="submit" disabled={isSubmitting} style={{ ...btn, marginTop: 10, opacity: isSubmitting ? 0.7 : 1 }}>
-                  {isSubmitting ? 'Initializing...' : 'Get My Store PIN →'}
+                  {isSubmitting ? 'Sending verification code...' : 'Continue — Verify Email →'}
                 </button>
               </form>
-
-              <p style={{ color: '#64748b', fontSize: '14px', textAlign: 'center', marginTop: 32, paddingTop: 24, borderTop: '1px dotted #e2e8f0' }}>
-                Already a vendor? <Link href="/login" style={{ color: '#f97316', textDecoration: 'none', fontWeight: 700 }}>DailyMarket Sign In</Link>
-              </p>
             </>
           ) : (
             <>
-              <div style={{ width: 64, height: 64, background: '#fff7ed', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, marginBottom: 24, border: '1px solid #fed7aa' }}>📬</div>
-              <h2 style={{ fontSize: '28px', fontWeight: 900, letterSpacing: '-1px', marginBottom: 8, color: '#0f172a' }}>Check your email</h2>
-              <p style={{ color: '#64748b', fontSize: '15px', marginBottom: 32 }}>We've sent a 6-digit PIN to <strong style={{ color: '#0f172a' }}>{email}</strong></p>
-              
-              <form onSubmit={handleOTPSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                <div>
-                  <label style={lbl} htmlFor="otp">Verification PIN</label>
-                  <input id="otp" name="otp" type="text" inputMode="numeric" maxLength={6} required style={{ ...inp, textAlign: 'center', fontSize: '32px', fontWeight: 900, letterSpacing: '12px', paddingLeft: 20, background: '#f8fafc' }} placeholder="000000" />
+              {/* OTP Step */}
+              <div style={{ textAlign: 'center', marginBottom: 32 }}>
+                <div style={{ width: 64, height: 64, background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: '28px' }}>📧</div>
+                <h2 style={{ fontSize: '26px', fontWeight: 900, letterSpacing: '-1px', marginBottom: 8 }}>Check your email</h2>
+                <p style={{ color: '#64748b', fontSize: '14px', lineHeight: 1.6 }}>
+                  We sent a 6-digit verification code to<br />
+                  <strong style={{ color: '#0f172a' }}>{formData.email}</strong>
+                </p>
+              </div>
+
+              {successMsg && (
+                <div style={{ marginBottom: 20, padding: '12px 16px', borderRadius: 10, background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#16a34a', fontSize: '13px', fontWeight: 500, textAlign: 'center' }}>
+                  ✅ {successMsg}
                 </div>
+              )}
+
+              <form onSubmit={handleOtpSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                {/* 6-box OTP input */}
+                <div>
+                  <label style={{ ...lbl, textAlign: 'center', marginBottom: 16 }}>Enter Verification Code</label>
+                  <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+                    {otp.map((digit, i) => (
+                      <input
+                        key={i}
+                        ref={el => { otpRefs.current[i] = el; }}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={e => handleOtpChange(i, e.target.value)}
+                        onKeyDown={e => handleOtpKeyDown(i, e)}
+                        style={{
+                          width: 52, height: 60, textAlign: 'center', fontSize: '24px', fontWeight: 900,
+                          border: `2px solid ${digit ? '#0f172a' : '#e2e8f0'}`,
+                          borderRadius: 12, outline: 'none', fontFamily: 'inherit', background: '#fff',
+                          color: '#0f172a', transition: 'border-color 0.15s',
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
                 <button type="submit" disabled={isSubmitting} style={{ ...btn, opacity: isSubmitting ? 0.7 : 1 }}>
-                  {isSubmitting ? 'Verifying...' : 'Complete Registration'}
+                  {isSubmitting ? 'Verifying...' : 'Verify & Create Account →'}
                 </button>
-                <button type="button" onClick={() => setStep('form')} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '14px', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}>← Use a different email</button>
               </form>
+
+              <div style={{ marginTop: 24, textAlign: 'center' }}>
+                <button onClick={handleResend} disabled={isSendingOtp} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                  {isSendingOtp ? 'Resending...' : "Didn't receive a code? Resend"}
+                </button>
+              </div>
+
+              <div style={{ marginTop: 12, textAlign: 'center' }}>
+                <button onClick={() => { setStep('details'); setMessage(''); setSuccessMsg(''); }} style={{ background: 'none', border: 'none', color: '#0f172a', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline' }}>
+                  ← Change email / details
+                </button>
+              </div>
             </>
           )}
-          {message && <div style={{ marginTop: 20, padding: '14px 18px', borderRadius: 10, background: '#fff1f2', border: '1px solid #fecdd3', color: '#e11d48', fontSize: '14px', fontWeight: 500 }}>⚠️ {message}</div>}
+
+          {message && (
+            <div style={{ marginTop: 20, padding: '14px 18px', borderRadius: 10, background: '#fff1f2', border: '1px solid #fecdd3', color: '#e11d48', fontSize: '14px', fontWeight: 500 }}>
+              ⚠️ {message}
+            </div>
+          )}
+
+          <p style={{ color: '#64748b', fontSize: '14px', textAlign: 'center', marginTop: 32, paddingTop: 24, borderTop: '1px dotted #e2e8f0' }}>
+            Already a vendor? <Link href="/login" style={{ color: '#0f172a', textDecoration: 'none', fontWeight: 700 }}>Sign In</Link>
+          </p>
         </div>
       </div>
     </main>
   );
 }
-

@@ -61,7 +61,7 @@ export default function TermsPage() {
         <div style={{ marginTop: 60, padding: 32, background: '#f8fafc', borderRadius: 16, border: '1px solid #e2e8f0' }}>
           <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.7 }}>
             Questions about our terms? Contact us at{' '}
-            <a href="mailto:legal@dailymarket.co.za" style={{ color: '#f97316', fontWeight: 700 }}>legal@dailymarket.co.za</a>
+            <a href="mailto:legal@dailymarket.co.za" style={{ color: '#111111', fontWeight: 700 }}>legal@dailymarket.co.za</a>
           </p>
         </div>
       </div>

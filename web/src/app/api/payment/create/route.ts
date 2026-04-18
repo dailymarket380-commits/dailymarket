@@ -66,6 +66,24 @@ export async function POST(req: NextRequest) {
       console.warn('[DB] Failed to save order items, but continuing with payment...', itemsError);
     }
 
+    // 2b. Create Seller Orders (Business Portal View)
+    const sellerOrders = cart.filter((item: any) => !!item.vendorName).map((item: any) => ({
+      order_ref: order.id.substring(0, 8).toUpperCase(),
+      vendor_name: item.vendorName,
+      product_title: item.title,
+      quantity: item.quantity,
+      amount: (item.basePrice || (item.price / 1.15)) * item.quantity,
+      customer_amount: item.price * item.quantity,
+      status: 'pending' // pending PayFast payment
+    }));
+    
+    if (sellerOrders.length > 0) {
+      const { error: sellerError } = await supabase.from('seller_orders').insert(sellerOrders);
+      if (sellerError) {
+        console.warn('[DB] Failed to save seller orders (is table created?):', sellerError.message);
+      }
+    }
+
     // 3. Prepare PayFast Request
     const merchantId = process.env.PAYFAST_MERCHANT_ID!;
     const merchantKey = process.env.PAYFAST_MERCHANT_KEY!;

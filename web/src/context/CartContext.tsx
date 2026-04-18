@@ -44,11 +44,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const openCart = () => setIsCartOpen(true);
 
-  // Sync with localStorage
+  // Sync with localStorage — always, even when empty (so clearCart() persists)
   useEffect(() => {
-    if (cart.length > 0) {
-      localStorage.setItem('dailymarket_cart', JSON.stringify(cart));
-    }
+    localStorage.setItem('dailymarket_cart', JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (product: any) => {

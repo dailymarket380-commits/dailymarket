@@ -1,151 +1,197 @@
 export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import { ProductCard } from '@/components/ui/ProductCard';
-import { fetchSAProducts } from '@/services/marketplaceService';
+import { fetchSAProducts, fetchSellers } from '@/services/marketplaceService';
+import { MobileHome } from '@/components/mobile/MobileHome';
 import styles from './page.module.css';
 
-const FEATURE_CARDS = [
-  {
-    title: 'FARM FRESH PRODUCE',
-    image: 'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?w=1200&q=80',
-    link: '/shop?category=fruit-veg'
-  },
-  {
-    title: 'THE BUTCHERY',
-    image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=1200&q=80',
-    link: '/shop?category=meat-poultry'
-  },
-  {
-    title: 'ARTISAN PANTRY',
-    image: 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=1200&q=80',
-    link: '/shop?category=pantry'
-  },
-  {
-    title: 'BAKERY & MEALS',
-    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&q=80',
-    link: '/shop?category=bakery'
-  }
+// ── CONFIG DRIVEN MERCHANDISING ──
+
+const PROMO_TILES = [
+  { title: 'Weekly Groceries', subtitle: 'SHOP FRESH PRODUCE', image: '/Design/media__1774993749899.png' },
+  { title: 'Premium Dairy', subtitle: 'SHOP MILK & CHEESE', image: '/Design/media__1774992046465.png' },
+  { title: 'Snacks & Treats', subtitle: 'SHOP EVERYDAY SNACKS', image: '/Design/media__1774994500971.png' },
+  { title: 'Exceptional Butchery', subtitle: 'SHOP PREMIUM CUTS', image: '/Design/media__1774993216792.png' }
 ];
 
-const CATEGORIES = [
-  { label: 'Produce', cat: 'fruit-veg', photo: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=200&h=200&fit=crop' },
-  { label: 'Butchery', cat: 'meat-poultry', photo: 'https://images.unsplash.com/photo-1603048297172-c9254479895e?w=200&h=200&fit=crop' },
-  { label: 'Bakery', cat: 'bakery', photo: 'https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?w=200&h=200&fit=crop' },
-  { label: 'Dairy', cat: 'dairy', photo: 'https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=200&h=200&fit=crop' },
-  { label: 'Pantry', cat: 'pantry', photo: 'https://images.unsplash.com/photo-1587049352847-4d4e12e2c0e8?w=200&h=200&fit=crop' },
-  { label: 'Beverages', cat: 'beverages', photo: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200&h=200&fit=crop' },
-  { label: 'Sweets', cat: 'sweets', photo: 'https://images.unsplash.com/photo-1582293041079-7814c2b12047?w=200&h=200&fit=crop' },
-  { label: 'Household', cat: 'household-care', photo: 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=200&h=200&fit=crop' }
+const FULL_WIDTH_BANNER = {
+  title: "Same Great Quality.\nLast Year's Prices.",
+  subtitle: "Enjoy our exceptional quality at the exact same price as last year.",
+  cta: "Shop The Difference"
+};
+
+const THIN_BANNER = {
+  title: "Celebrate With A Feast To Remember",
+  cta: "SHOP THE OCCASION"
+};
+
+// ── ICONS ──
+const ICONS = {
+  fruit: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2C12 2 10 5 10 7C10 9 12 11 12 11C12 11 14 9 14 7C14 5 12 2 12 2Z"/><circle cx="12" cy="15" r="7"/></svg>,
+  meat: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 8C16 8 13.5 9.5 12 12M12 12C10.5 14.5 8 16 8 16M12 12C12 12 13 14 16 16C19 18 20 16 20 16C20 16 18 13 16 8ZM8 16C8 16 6 18 4 16C2 14 4 12 4 12C4 12 6.5 9 8 8C9.5 7 12 8 12 8"/></svg>,
+  bakery: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 18H4V14C4 12 6 10 8 10H16C18 10 20 12 20 14V18H12ZM12 18V22M8 10C8 6 12 4 16 6"/></svg>,
+  ready: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M22 10H2M10 6V18"/></svg>,
+  dairy: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="6" y="8" width="12" height="14" rx="1"/><path d="M9 8V4H15V8"/><path d="M10 16H14"/></svg>,
+  pantry: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 10H18M10 14H14"/></svg>,
+  beverages: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 22H16L18 6H6L8 22Z"/><path d="M10 6V2M14 6V2"/></svg>,
+  frozen: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2V22M6 6L18 18M18 6L6 18"/></svg>
+};
+
+const DEPARTMENTS = [
+  { label: 'Fruit & Veg', icon: ICONS.fruit, href: '/shop?category=fruit-veg' },
+  { label: 'Meat, Poultry & Fish', icon: ICONS.meat, href: '/shop?category=meat-poultry' },
+  { label: 'Bakery & Desserts', icon: ICONS.bakery, href: '/shop?category=bakery' },
+  { label: 'Ready Meals', icon: ICONS.ready, href: '/shop?category=ready-meals' },
+  { label: 'Dairy, Eggs & Milk', icon: ICONS.dairy, href: '/shop?category=dairy' },
+  { label: 'Pantry', icon: ICONS.pantry, href: '/shop?category=pantry' },
+  { label: 'Beverages', icon: ICONS.beverages, href: '/shop?category=beverages' },
+  { label: 'Frozen', icon: ICONS.frozen, href: '/shop?category=frozen' }
+];
+
+const FALLBACK_COVERS = [
+  '/promo-entertaining.png',
+  '/promo-supperclub.png',
+  '/promo-pickledfish.png',
+  '/promo-hotcross.png'
 ];
 
 export default async function Home() {
   let allProducts: any[] = [];
+  let dbSellers: any[] = [];
   try {
     allProducts = await fetchSAProducts(1, 400);
+    dbSellers = await fetchSellers();
   } catch (err) {
-    console.error('[LandingPage] Failed to fetch products:', err);
+    console.error('[LandingPage] Failed to fetch products or sellers:', err);
   }
 
-  const getRow = (cat: string, max = 4) => allProducts.filter(p => p.category === cat).slice(0, max);
-  const localRow = allProducts.slice(0, 8);
+  const displayMerchants = dbSellers.length > 0 ? dbSellers.slice(0, 4) : [];
+  const featuredOffers = allProducts.slice(0, 5);
 
   return (
-    <div className={styles.pageContainer}>
-      
-      {/* ── High-Contrast Hero Section ── */}
-      <section className={styles.heroSection}>
-        <div className={styles.heroOverlay}></div>
-        <img 
-          src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1920&q=90" 
-          alt="DailyMarket Hero" 
-          className={styles.heroBg}
-        />
+    <>
+      <MobileHome products={allProducts} />
+
+      <div className={`${styles.pageContainer} ${styles.desktopContainer}`}>
         
-        <div className="container">
-          <div className={styles.heroContent}>
-            <span className={styles.heroBadge}>PREMIUM MARKETPLACE DELIVERY</span>
-            <h1 className={styles.heroTitle}>DAILYMARKET</h1>
-            <p className={styles.heroSubtitle}>
-              Authentic farm produce, artisan meats, and daily essentials from local merchants—delivered with precision.
-            </p>
-            
-            <div className={styles.heroActionRow}>
-              <Link href="/shop" className={styles.primaryBtn}>SHOP NOW</Link>
-              <Link href="/register?role=supplier" className={styles.secondaryBtn}>BECOME A SELLER</Link>
+        {/* ── 1. HERO BANNER ── */}
+        <section className={styles.fullWidthBannerWrap}>
+          <div className="container">
+            <Link href="/shop" className={styles.fullWidthBanner}>
+              <div className={styles.fwbContent}>
+                <span className={styles.heroPill}>EVERYDAY VALUE</span>
+                <h2>Same Great Quality.<br/>Last Year's Prices.</h2>
+                <p>Shop smart. Save more. Delivered fresh.</p>
+                <div style={{ marginTop: '24px' }}>
+                  <span className={styles.fwbCta}>Shop Now &gt;</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </section>
+
+        {/* ── 2. NEARBY STORES ── */}
+        <section className={styles.cashAndCarrySection}>
+          <div className="container">
+            <div className={styles.sectionHeadingLeft}>
+              <div>
+                <h2>Nearby Stores</h2>
+                <p className={styles.subtext}>Shop from trusted cash & carry stores</p>
+              </div>
+              <Link href="/stores" className={styles.viewMoreLink}>See All Stores &gt;</Link>
+            </div>
+
+            <div className={styles.ccGrid}>
+              {displayMerchants.map((merchant, idx) => (
+                <Link href={merchant.link} key={idx} className={styles.ccCard}>
+                  <div className={styles.ccImage}>
+                    <img src={merchant.logo || FALLBACK_COVERS[idx % FALLBACK_COVERS.length]} alt={merchant.name} />
+                    <div className={styles.ccOverlay} />
+                    <div className={styles.ccStatus}>OPEN</div>
+                  </div>
+                  <div className={styles.ccContent}>
+                    <h3 className={styles.ccName}>{merchant.name}</h3>
+                    <p className={styles.ccDesc}>⭐ 4.6 • 30-45 min</p>
+                    <p className={styles.ccDelivery}>Free delivery over R500</p>
+                    <div className={styles.ccFooter}>
+                       <span className={styles.ccButton}>View Store</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Category Quick Links ── */}
-      <div className={styles.categoryRowWrap}>
-        <div className="container">
-          <div className={styles.categoryRow}>
-            {CATEGORIES.map(c => (
-              <Link key={c.cat} href={`/shop?category=${c.cat}`} className={styles.categoryCard}>
-                <div className={styles.categoryIcon}>
-                   {/* Using grayscale images and simple UI */}
-                  <img src={c.photo} alt={c.label} style={{ filter: 'grayscale(100%)' }} />
-                </div>
-                <span>{c.label}</span>
-              </Link>
-            ))}
+        {/* ── 3. SHOP BY CATEGORY ── */}
+        <section className={styles.departmentsSection}>
+          <div className="container">
+             <div className={styles.sectionHeadingLeft}>
+              <div>
+                <h2>Shop by Category</h2>
+                <p className={styles.subtext}>Find exactly what you need</p>
+              </div>
+              <Link href="/shop" className={styles.viewMoreLink}>View All Categories &gt;</Link>
+            </div>
+            
+            <div className={styles.departmentGrid}>
+              {DEPARTMENTS.map((dept, idx) => (
+                <Link key={idx} href={dept.href} className={styles.departmentBox}>
+                  <div className={styles.deptIcon}>{dept.icon}</div>
+                  <span>{dept.label}</span>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
+
+        {/* ── 4. POPULAR THIS WEEK ── */}
+        {featuredOffers.length > 0 && (
+          <section className={styles.productCarousels}>
+            <div className="container">
+              <div className={styles.sectionHeadingLeft}>
+                <div>
+                  <h2>Popular This Week</h2>
+                  <p className={styles.subtext}>Loved by our customers</p>
+                </div>
+                <Link href="/shop" className={styles.viewMoreLink}>See All &gt;</Link>
+              </div>
+              <div className={styles.productGrid}>
+                 {/* Recreate products to match horizontal layout precisely, using our custom styles for home page */}
+                 {featuredOffers.map(p => (
+                   <Link href={`/product/${p.id}`} key={p.id} className={styles.horizontalProductCard}>
+                      <img src={p.image_url} alt={p.title} className={styles.hpImage}/>
+                      <div className={styles.hpInfo}>
+                         <div className={styles.hpTitle}>{p.title}</div>
+                         <div className={styles.hpUnit}>{p.unit || '1kg'}</div>
+                         <div className={styles.hpPrice}>R{p.premium_price.toFixed(2)}</div>
+                      </div>
+                      <div className={styles.hpAddBtn}>+</div>
+                   </Link>
+                 ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ── 5. BOTTOM PROMO BANNER ── */}
+        <section className={styles.bottomPromoWrap}>
+          <div className="container">
+             <div className={styles.bottomPromo}>
+                <div className={styles.bpContent}>
+                   <div className={styles.bpIcon}>%</div>
+                   <div>
+                     <span className={styles.bpTag}>SAVE MORE</span>
+                     <h2>Fresh Deals. Every Week.</h2>
+                     <p>New specials every Monday. Don't miss out!</p>
+                   </div>
+                </div>
+                <Link href="/shop" className={styles.bpBtn}>View Specials</Link>
+             </div>
+          </div>
+        </section>
+
       </div>
-
-      {/* ── Latest Products ── */}
-      <section className="container" style={{ padding: '100px 0' }}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>FRESH SELECTIONS</h2>
-          <Link href="/shop" className={styles.viewMoreLink}>EXPLORE ALL PRODUCTS &rarr;</Link>
-        </div>
-        
-        <div className={styles.productGrid}>
-          {localRow.map(p => (
-            <ProductCard 
-              key={p.id} 
-              id={p.id} 
-              title={p.title} 
-              price={p.premium_price} 
-              imageUrl={p.image_url} 
-              unit={p.unit} 
-              rating={p.rating} 
-              reviewCount={p.reviewCount} 
-              vendorName={p.vendor_name}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* ── Feature Masonry (Monochrome) ── */}
-      <section className={styles.featureGridSection}>
-        <div className="container">
-          <div className={styles.featureGrid}>
-            {FEATURE_CARDS.map((card, i) => (
-              <Link key={i} href={card.link} className={styles.featureCard}>
-                <img src={card.image} alt={card.title} style={{ filter: 'grayscale(100%)' }} />
-                <div className={styles.featureOverlay}>
-                   <h3>{card.title}</h3>
-                   <span className={styles.featureLink}>EXPLORE CATEGORY &rsaquo;</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Merchant Acquisition Banner ── */}
-      <section className="container">
-        <div className={styles.merchantBanner}>
-           <div className={styles.merchantText}>
-             <h2>SELL ON DAILYMARKET</h2>
-             <p>Scale your local business with our enterprise delivery infrastructure.</p>
-             <Link href="/register?role=supplier" className={styles.primaryBtn}>OPEN YOUR STORE</Link>
-           </div>
-        </div>
-      </section>
-
-    </div>
+    </>
   );
 }

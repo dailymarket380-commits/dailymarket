@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS public.products (
     description TEXT,
     category TEXT NOT NULL,
     base_price DECIMAL(10,2) NOT NULL, -- Original supplier price
-    premium_price DECIMAL(10,2) GENERATED ALWAYS AS (base_price * 1.10) STORED, -- 10% premium markup
+    premium_price DECIMAL(10,2) GENERATED ALWAYS AS (base_price * 1.15) STORED, -- 15% premium markup
     unit TEXT NOT NULL, -- e.g., 'each', '1kg'
     stock_quantity INTEGER DEFAULT 0,
     image_url TEXT,

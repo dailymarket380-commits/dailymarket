@@ -6,6 +6,9 @@ import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import styles from './checkout.module.css';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+
+const LocationPickerMap = dynamic(() => import('@/components/checkout/LocationPickerMap'), { ssr: false });
 
 type Step = 'shipping' | 'payment' | 'success';
 
@@ -17,8 +20,42 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [shipping, setShipping] = useState({
-    firstName: '', lastName: '', address: '', postalCode: '', phone: '', notes: ''
+    firstName: '', lastName: '', address: '', postalCode: '', phone: '', notes: '', lat: -33.98438, lng: 25.65936
   });
+  
+  // Tiered Delivery Pricing
+  const shippingFee = subtotal >= 500 || subtotal === 0 
+    ? 0 
+    : subtotal < 100 
+      ? 15.00 
+      : subtotal < 250 
+        ? 25.00 
+        : 35.00;
+  const grandTotal = subtotal + shippingFee;
+
+  const [realOrderId, setRealOrderId] = useState<string>('');
+  const [realOrderRef, setRealOrderRef] = useState<string>('');
+  
+  // Stripe / Promo Code Additions
+  const [promoCode, setPromoCode] = useState('');
+  const [discount, setDiscount] = useState(0);
+  const [promoStatus, setPromoStatus] = useState('');
+  
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvc, setCvc] = useState('');
+
+  const handleApplyPromo = async () => {
+    if (promoCode.toUpperCase() === 'WELCOME10') {
+      setDiscount(subtotal * 0.1);
+      setPromoStatus('✅ 10% applied!');
+    } else {
+      setDiscount(0);
+      setPromoStatus('❌ Invalid promo code');
+    }
+  };
+
+  const finalCartTotal = grandTotal - discount;
 
   // 🔒 Auth Guard — redirect to login if not signed in
   useEffect(() => {
@@ -26,6 +63,17 @@ export default function CheckoutPage() {
       router.replace('/login?redirect=/checkout');
     }
   }, [user, authLoading, router]);
+
+  // If the user cancelled PayFast payment, they return to /checkout?cancelled=true
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('cancelled') === 'true') {
+        setPaymentError('Payment was cancelled. You can try again.');
+        setStep('payment');
+      }
+    }
+  }, []);
 
   // Show nothing while auth is loading (prevents flash)
   if (authLoading) {
@@ -46,12 +94,12 @@ export default function CheckoutPage() {
         <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
           You need an account to complete your purchase. <br />Your cart will be saved.
         </p>
-        <Link href="/login?redirect=/checkout" style={{ background: '#f97316', color: 'white', padding: '1rem 2.5rem', fontWeight: 900, borderRadius: '6px', fontSize: '1rem' }}>
+        <Link href="/login?redirect=/checkout" style={{ background: '#111111', color: 'white', padding: '1rem 2.5rem', fontWeight: 900, borderRadius: '6px', fontSize: '1rem' }}>
           SIGN IN TO CHECKOUT
         </Link>
         <br /><br />
-        <Link href="/register?redirect=/checkout" style={{ color: 'var(--brand-orange)', fontWeight: 700, fontSize: '0.9rem' }}>
-          Don't have an account? Create one free →
+        <Link href="/register?redirect=/checkout" style={{ color: '#111', fontWeight: 700, fontSize: '0.9rem' }}>
+          Don&apos;t have an account? Create one free →
         </Link>
       </div>
     );
@@ -69,38 +117,44 @@ export default function CheckoutPage() {
     setPaymentError(null);
 
     try {
-      // 1. Call our API to create a signed PayFast request
-      const res = await fetch('/api/payment/create', {
+      const res = await fetch('/api/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cart, subtotal, shipping, user }),
+        body: JSON.stringify({ cart, subtotal: finalCartTotal, shipping, user }),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Payment setup failed');
+      if (!res.ok) throw new Error(data.error || 'Could not create order. Please try again.');
 
-      // 2. Build a hidden form and submit it to PayFast
-      // PayFast requires a form POST — not a fetch or redirect
+      // ⚠️ Do NOT clear cart yet — user hasn't paid.
+      // Cart is cleared on /checkout/success after PayFast confirms payment.
+
+      if (data.isLocalBypass) {
+        window.location.href = data.bypassUrl;
+        return;
+      }
+
+      // Redirect to PayFast via hidden form submission
       const form = document.createElement('form');
       form.method = 'POST';
-      form.action = data.payfast_url;
-
-      Object.entries(data.form_data).forEach(([key, value]) => {
+      form.action = data.payfastUrl;
+      for (const key in data.payfastArgs) {
         const input = document.createElement('input');
         input.type = 'hidden';
         input.name = key;
-        input.value = String(value);
+        input.value = data.payfastArgs[key];
         form.appendChild(input);
-      });
-
+      }
       document.body.appendChild(form);
-      form.submit(); // Redirects to PayFast secure payment page
+      form.submit();
 
     } catch (err: any) {
-      setPaymentError(err.message || 'Could not connect to payment gateway. Please try again.');
+      setPaymentError(err.message || 'Could not process payment. Please try again.');
       setLoading(false);
     }
   };
+
+
 
   if (cart.length === 0 && step !== 'success') {
     return (
@@ -112,55 +166,92 @@ export default function CheckoutPage() {
   }
 
   if (step === 'success') {
-    const orderNum = `DM-${Math.floor(80000 + Math.random() * 19999)}`;
     const firstName = user?.user_metadata?.full_name?.split(' ')[0] || 'there';
     return (
-      <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #fff7ed 100%)', minHeight: '70vh', padding: '5rem 1rem' }}>
-        <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+      <div style={{ background: '#fff', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
 
-          {/* Animated check */}
-          <div className={styles.successIcon}>
+        {/* Hero confirmation banner */}
+        <div style={{
+          background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)',
+          padding: '60px 24px 80px',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          {/* Background glow */}
+          <div style={{ position: 'absolute', top: -60, left: '50%', transform: 'translateX(-50%)', width: 300, height: 300, background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+          {/* Animated check badge */}
+          <div className={styles.successIcon} style={{ background: '#10b981', boxShadow: '0 0 0 12px rgba(16,185,129,0.15)', marginBottom: '1.5rem' }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '-0.03em' }}>
-            Thank you, {firstName}! 🎉
+          <div style={{ display: 'inline-block', background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 100, padding: '4px 14px', marginBottom: 16 }}>
+            <span style={{ color: '#10b981', fontWeight: 800, fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase' }}>✓ Order Confirmed</span>
+          </div>
+
+          <h1 style={{ fontSize: 'clamp(1.8rem, 6vw, 3rem)', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em', marginBottom: 8 }}>
+            Thank you, {firstName}!
           </h1>
-          <p style={{ color: '#16a34a', fontWeight: 800, fontSize: '1rem', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Order Confirmed
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', fontWeight: 500 }}>
+            Reference: <span style={{ color: '#fff', fontWeight: 800, fontFamily: 'monospace' }}>{realOrderRef}</span>
           </p>
-          <p style={{ color: '#888', fontSize: '0.85rem', marginBottom: '2.5rem' }}>
-            Order reference: <strong style={{ color: '#1a1a1a' }}>{orderNum}</strong>
-          </p>
+        </div>
 
-          <p style={{ color: '#555', fontSize: '1.05rem', lineHeight: 1.8, marginBottom: '3rem', maxWidth: '440px', margin: '0 auto 3rem' }}>
-            Your order is being prepared and will be delivered to your address. You'll receive an <strong>SMS and email confirmation</strong> shortly.
-          </p>
+        {/* Card that floats up over banner */}
+        <div style={{ flex: 1, padding: '0 16px 40px', marginTop: -32 }}>
+          <div style={{ background: '#fff', borderRadius: 20, boxShadow: '0 8px 40px rgba(0,0,0,0.10)', padding: '28px 24px', marginBottom: 16 }}>
+            <p style={{ color: '#555', fontSize: '14px', lineHeight: 1.8, textAlign: 'center', marginBottom: 24 }}>
+              Your order is being prepared and will be delivered to your address. You&apos;ll receive an <strong style={{ color: '#111' }}>SMS and email confirmation</strong> shortly.
+            </p>
 
-          {/* What happens next */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '3rem' }}>
-            {[
-              { icon: '📦', title: 'Packing', desc: 'Vendor is preparing your items' },
-              { icon: '🚚', title: 'On the Way', desc: 'Driver picks up & heads to you' },
-              { icon: '🏠', title: 'Delivered', desc: 'Enjoy your fresh order!' },
-            ].map((step, i) => (
-              <div key={i} style={{ background: 'white', borderRadius: '10px', padding: '1.25rem 1rem', border: '1px solid #f0f0f0', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
-                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{step.icon}</div>
-                <div style={{ fontWeight: 900, fontSize: '0.85rem', marginBottom: '0.25rem', textTransform: 'uppercase' }}>{step.title}</div>
-                <div style={{ fontSize: '0.75rem', color: '#888', lineHeight: 1.5 }}>{step.desc}</div>
-              </div>
-            ))}
+            {/* Progress Steps */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0, marginBottom: 8 }}>
+              {[
+                { icon: '📦', title: 'Packing', active: true },
+                { icon: '🚚', title: 'On the Way', active: false },
+                { icon: '🏠', title: 'Delivered', active: false },
+              ].map((step, i, arr) => (
+                <React.Fragment key={i}>
+                  <div style={{ textAlign: 'center', flex: 1 }}>
+                    <div style={{
+                      width: 48, height: 48, borderRadius: '50%', margin: '0 auto 8px',
+                      background: step.active ? '#0f172a' : '#f1f5f9',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '22px',
+                      boxShadow: step.active ? '0 4px 14px rgba(15,23,42,0.25)' : 'none'
+                    }}>
+                      {step.icon}
+                    </div>
+                    <div style={{ fontSize: '10px', fontWeight: 800, color: step.active ? '#0f172a' : '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{step.title}</div>
+                  </div>
+                  {i < arr.length - 1 && (
+                    <div style={{ height: 2, flex: 0.5, background: '#e2e8f0', marginBottom: 24, flexShrink: 0 }} />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
 
           {/* CTAs */}
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/" className={styles.homeBtn}>
-              🛍️ Continue Shopping
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <Link href={`/track?orderId=${realOrderId}`} style={{
+              background: 'linear-gradient(135deg, #0f172a 0%, #111 100%)',
+              color: 'white', padding: '18px', fontWeight: 900, borderRadius: 14,
+              fontSize: '15px', textTransform: 'uppercase', letterSpacing: '0.04em',
+              textDecoration: 'none', textAlign: 'center', display: 'block',
+              boxShadow: '0 4px 20px rgba(15,23,42,0.3)'
+            }}>
+              📍 Track My Order
             </Link>
-            <Link href="/support" style={{ background: 'transparent', color: '#f97316', padding: '1rem 2rem', fontWeight: 900, border: '2px solid #f97316', borderRadius: '6px', fontSize: '0.9rem', textTransform: 'uppercase' }}>
-              💬 Need Help?
+            <Link href="/" style={{
+              background: '#f8fafc', color: '#0f172a', padding: '16px', fontWeight: 800,
+              borderRadius: 14, fontSize: '14px', textDecoration: 'none',
+              textAlign: 'center', display: 'block', border: '1.5px solid #e2e8f0'
+            }}>
+              🛍️ Continue Shopping
             </Link>
           </div>
         </div>
@@ -191,8 +282,13 @@ export default function CheckoutPage() {
                 </div>
               </div>
               <div className={styles.inputGroup}>
+                <label>GPS Location & Map Pin</label>
+                <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.5rem' }}>Allow location access or drag the map to pinpoint your exact delivery spot.</p>
+                <LocationPickerMap onLocationChange={(lat, lng) => setShipping(s => ({ ...s, lat, lng }))} />
+              </div>
+              <div className={styles.inputGroup}>
                 <label>Street Address</label>
-                <input type="text" required placeholder="123 Bree Street, Cape Town" value={shipping.address} onChange={e => setShipping(s => ({ ...s, address: e.target.value }))} />
+                <input type="text" required spellCheck={true} autoCorrect="on" placeholder="123 Bree Street, Cape Town" value={shipping.address} onChange={e => setShipping(s => ({ ...s, address: e.target.value }))} />
               </div>
               <div className={styles.formRow}>
                 <div className={styles.inputGroup}>
@@ -206,7 +302,7 @@ export default function CheckoutPage() {
               </div>
               <div className={styles.inputGroup}>
                 <label>Delivery Notes (Optional)</label>
-                <input type="text" placeholder="Ring bell, leave at door, etc." value={shipping.notes} onChange={e => setShipping(s => ({ ...s, notes: e.target.value }))} />
+                <input type="text" spellCheck={true} autoCorrect="on" placeholder="Ring bell, leave at door, etc." value={shipping.notes} onChange={e => setShipping(s => ({ ...s, notes: e.target.value }))} />
               </div>
               <button type="submit" className={styles.primaryBtn}>CONTINUE TO PAYMENT →</button>
             </form>
@@ -214,7 +310,6 @@ export default function CheckoutPage() {
             <form className={styles.form} onSubmit={handlePaymentSubmit}>
               <h2>SECURE PAYMENT</h2>
 
-              {/* Secure Gateway Notice — Real card data must go through PayFast/Peach */}
               <div className={styles.secureGatewayBox}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -222,36 +317,28 @@ export default function CheckoutPage() {
                 </svg>
                 <div>
                   <strong>256-bit SSL Encrypted Checkout</strong>
-                  <p>You will be redirected to our secure payment gateway to complete your purchase. We never store your card details.</p>
+                  <p>You will be securely redirected to PayFast to complete your payment. We never store your card details.</p>
                 </div>
               </div>
 
-              <div className={styles.paymentMethods}>
-                <div className={styles.method}>
-                  <input type="radio" name="payment" id="payfast" defaultChecked />
-                  <label htmlFor="payfast">
-                    <span className={styles.methodName}>💳 PayFast</span>
-                    <span className={styles.methodDesc}>Credit / Debit Card, Instant EFT, Mobicred</span>
-                  </label>
-                </div>
-                <div className={styles.method}>
-                  <input type="radio" name="payment" id="eft" />
-                  <label htmlFor="eft">
-                    <span className={styles.methodName}>🏦 Manual EFT</span>
-                    <span className={styles.methodDesc}>Pay via internet banking — order held for 24 hours</span>
-                  </label>
-                </div>
-                <div className={styles.method}>
-                  <input type="radio" name="payment" id="crypto" />
-                  <label htmlFor="crypto">
-                    <span className={styles.methodName}>₿ Crypto</span>
-                    <span className={styles.methodDesc}>Pay with Bitcoin or USDT (via BitcoinPaygate)</span>
-                  </label>
+              {/* PayFast redirect panel */}
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, padding: '28px 24px', marginTop: 20, textAlign: 'center' }}>
+                <div style={{ fontSize: 48, marginBottom: 12 }}>💳</div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: 8, color: '#0f172a', textTransform: 'none', letterSpacing: 0 }}>
+                  Pay securely with PayFast
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: 20 }}>
+                  You&apos;ll be redirected to PayFast where you can pay by <strong>Card, EFT, or SnapScan</strong>. Your cart is saved and will only be cleared after successful payment.
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
+                  {['Visa', 'Mastercard', 'EFT', 'SnapScan', 'Instant EFT'].map(m => (
+                    <span key={m} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 6, padding: '4px 12px', fontSize: '0.75rem', fontWeight: 700, color: '#334155' }}>{m}</span>
+                  ))}
                 </div>
               </div>
 
               <div className={styles.trustRow}>
-                <span>🔒 VeriSign Secured</span>
+                <span>🔒 256-bit SSL</span>
                 <span>✅ PCI DSS Compliant</span>
                 <span>🛡️ Fraud Protection</span>
               </div>
@@ -266,7 +353,7 @@ export default function CheckoutPage() {
                 {loading ? (
                   <span className={styles.loadingSpinner}>⟳ REDIRECTING TO PAYFAST...</span>
                 ) : (
-                  `🔒 PAY SECURELY — R ${subtotal.toFixed(2)}`
+                  `🔒 PAY WITH PAYFAST — R ${finalCartTotal.toFixed(2)}`
                 )}
               </button>
               <button type="button" className={styles.backBtn} onClick={() => setStep('shipping')}>← BACK TO SHIPPING</button>
@@ -296,11 +383,35 @@ export default function CheckoutPage() {
               </div>
               <div className={styles.totalRow}>
                 <span>Shipping</span>
-                <span className={styles.free}>FREE</span>
+                {shippingFee === 0 ? (
+                  <span className={styles.free}>FREE (Over R500)</span>
+                ) : (
+                  <span>R {shippingFee.toFixed(2)}</span>
+                )}
               </div>
+              
+              <div style={{ padding: '16px 0', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0', margin: '16px 0', display: 'flex', gap: 8 }}>
+                <input 
+                  type="text" 
+                  placeholder="Promo Code (Try WELCOME10)" 
+                  value={promoCode} 
+                  onChange={e => setPromoCode(e.target.value)} 
+                  style={{ flex: 1, padding: '10px 14px', border: '1px solid #cbd5e1', borderRadius: 8 }} 
+                />
+                <button type="button" onClick={handleApplyPromo} style={{ background: '#0f172a', color: 'white', padding: '0 16px', borderRadius: 8, fontWeight: 700, border: 'none', cursor: 'pointer' }}>Apply</button>
+              </div>
+              {promoStatus && <div style={{ fontSize: '0.85rem', fontWeight: 600, color: promoStatus.includes('✅') ? '#05a357' : '#ef4444', marginBottom: 12 }}>{promoStatus}</div>}
+
+              {discount > 0 && (
+                <div className={styles.totalRow} style={{ color: '#05a357', fontWeight: 700 }}>
+                  <span>Discount</span>
+                  <span>- R {discount.toFixed(2)}</span>
+                </div>
+              )}
+
               <div className={`${styles.totalRow} ${styles.grandTotal}`}>
                 <span>Total</span>
-                <span>R {subtotal.toFixed(2)}</span>
+                <span>R {finalCartTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>

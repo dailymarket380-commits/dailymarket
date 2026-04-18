@@ -28,12 +28,12 @@ export default function Header() {
 
   return (
     <>
-      <header className={`${styles.header} ${scrolled ? styles.scrolled : ''} ${!isHome ? styles.notHome : ''}`}>
+      <header className={`${styles.header} ${scrolled ? styles.scrolled : ''} ${isHome ? styles.hideOnMobile : ''}`}>
         <div className={styles.topBar}>
           <div className="container">
             <div className={styles.topBarContent}>
               <Link href="/" className={styles.logo}>
-                DAILYMARKET
+                DAILY MARKET
               </Link>
 
               <div className={styles.searchArea}>
@@ -41,18 +41,36 @@ export default function Header() {
               </div>
 
               <div className={styles.actions}>
-                {!loading && (
-                  user ? (
+                {mounted ? (
+                  !loading && user ? (
                     <div className={styles.accountMenu}>
                       <span>{user.email?.split('@')[0]}</span>
                       <button onClick={signOut}>Log Out</button>
                     </div>
                   ) : (
-                    <Link href="/login" className={styles.authLink}>Sign In</Link>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                      <Link href="/login" className={styles.authLink}>Sign In</Link>
+                      <Link href="/register" className={styles.signupLink}>Sign Up</Link>
+                    </div>
                   )
+                ) : (
+                  /* Placeholder for server render to avoid layout shift and hydration mismatch */
+                  <div className={styles.authPlaceholder} style={{ width: '60px' }}></div>
                 )}
 
-                <div className={styles.cartIcon} onClick={() => setIsCartOpen(true)}>
+                {/* Wishlist icon – always visible */}
+                <Link
+                  href="/wishlist"
+                  title="My Wishlist"
+                  className={styles.cartIcon}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="20" height="20">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                </Link>
+
+                <div className={`${styles.cartIcon} ${styles.hideCartOnMobile}`} onClick={() => setIsCartOpen(true)}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                   {mounted && totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
                 </div>
@@ -67,6 +85,7 @@ export default function Header() {
               <Link href="/shop">ALL PRODUCTS</Link>
               <Link href="/shop?category=fruit-veg">PRODUCE</Link>
               <Link href="/shop?category=meat-poultry">BUTCHERY</Link>
+              <Link href="/stores">CASH & CARRIES</Link>
               <Link href="/shop?category=pantry">PANTRY</Link>
               <Link href="/shop?category=household-care">HOUSEHOLD</Link>
             </div>

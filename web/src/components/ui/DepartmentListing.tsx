@@ -116,7 +116,7 @@ export default async function DepartmentListing({ title, category }: DepartmentL
         ) : (
           <div className={styles.emptyState} style={{ padding: '4rem', textAlign: 'center', background: 'var(--surface-hover)', borderRadius: '8px', border: '1px dashed var(--border-color)' }}>
               <p style={{ color: 'var(--secondary-text)', fontSize: '1.25rem' }}>
-                We're currently sourcing the finest premium {title.toLowerCase()} for you.
+                We&apos;re currently sourcing the finest premium {title.toLowerCase()} for you.
               </p>
               <div style={{ marginTop: '2rem' }}>
                 <Link href="/" style={{ color: 'var(--primary-text)', fontWeight: '700', textDecoration: 'underline' }}>

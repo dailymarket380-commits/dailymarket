@@ -58,3 +58,30 @@ export async function getBankDetails(vendorName: string) {
   };
 }
 
+export async function saveStoreLogo(vendorName: string, logoUrl: string) {
+  if (!vendorName || !logoUrl) return { success: false, error: 'Missing information.' };
+
+  // Store logo in sellers table where logo_url exists
+  const { error } = await supabase
+    .from('sellers')
+    .update({ logo_url: logoUrl })
+    .eq('business_name', vendorName);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}
+
+export async function getStoreLogo(vendorName: string) {
+  const { data, error } = await supabase
+    .from('sellers')
+    .select('logo_url')
+    .eq('business_name', vendorName)
+    .single();
+
+  if (error || !data) return { success: false, logoUrl: null };
+  return { success: true, logoUrl: data.logo_url as string | null };
+}
+

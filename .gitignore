@@ -31,4 +31,6 @@ yarn-error.log*
 tmp_*
 test_db.js
 test_email.js
+test_sms.js
+test_sms_url.js
 *.txt

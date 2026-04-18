@@ -19,7 +19,7 @@ export default function NotFound() {
       <h1 style={{
         fontSize: 'clamp(5rem, 15vw, 10rem)',
         fontWeight: 900,
-        color: '#f97316',
+        color: '#111111',
         letterSpacing: '-0.05em',
         lineHeight: 0.9,
         marginBottom: '1rem',
@@ -48,7 +48,7 @@ export default function NotFound() {
           🏠 Back to Home
         </Link>
         <Link href="/shop" style={{
-          background: '#f97316',
+          background: '#111111',
           color: 'white',
           padding: '1rem 2rem',
           fontWeight: 900,
@@ -72,7 +72,7 @@ export default function NotFound() {
           <Link key={link.href} href={link.href} style={{
             fontSize: '0.85rem',
             fontWeight: 700,
-            color: '#f97316',
+            color: '#111111',
             borderBottom: '2px solid #fed7aa',
             paddingBottom: '2px',
           }}>

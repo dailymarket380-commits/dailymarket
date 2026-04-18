@@ -94,16 +94,16 @@ export async function PUT(req: NextRequest) {
     // 2. Perform the actual Supabase DB authentication using the provided password or fallback to derived
     const finalPassword = password || generateDerivedPassword(cleanEmail);
 
-    const { data: { user: foundUser, session: foundSession }, error: signInError } = await supabase.auth.signInWithPassword({
+    const signInResult = await supabase.auth.signInWithPassword({
       email: cleanEmail,
       password: finalPassword
     });
 
-    let user = foundUser;
-    let session = foundSession;
+    let user = signInResult.data.user;
+    let session = signInResult.data.session;
 
     // If perfectly successful, the user existed! If not, we automatically create them behind the scenes (SignUp flow handled implicitly by OTP!)
-    if (signInError && signInError.message.includes('Invalid login credentials')) {
+    if (signInResult.error && signInResult.error.message.includes('Invalid login credentials')) {
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: cleanEmail,
         password: finalPassword,

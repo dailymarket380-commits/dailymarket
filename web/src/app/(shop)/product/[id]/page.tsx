@@ -1,7 +1,23 @@
 import Link from 'next/link';
 import { fetchProductById } from '@/services/marketplaceService';
 import { AddToCartControls } from '@/components/ui/AddToCartControls';
+import { WishlistButton } from '@/components/ui/WishlistButton';
+import { ProductReviews } from '@/components/ui/ProductReviews';
 import styles from './page.module.css';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const product = await fetchProductById(id);
+  if (!product) return { title: 'Product Not Found | DailyMarket' };
+  
+  return {
+    title: `${product.title} | DailyMarket`,
+    description: `Buy ${product.title} online for R${product.price.toFixed(2)}. Best quality, fast delivery from DailyMarket.`,
+    openGraph: {
+      images: [product.image_url || 'https://images.unsplash.com/photo-1518843875459-f738682238a6?w=600&h=600&fit=crop'],
+    }
+  };
+}
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -12,7 +28,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
         <h1>Product Not Found</h1>
         <p>Sorry, the product you are looking for does not exist.</p>
-        <Link href="/" style={{ color: '#f97316', fontWeight: 800 }}>GO BACK HOME</Link>
+        <Link href="/" style={{ color: '#111111', fontWeight: 800 }}>GO BACK HOME</Link>
       </div>
     );
   }
@@ -58,16 +74,19 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
              <div className={styles.unitPrice}>(R {product.premium_price.toFixed(2)} / {product.unit || 'Each'})</div>
           </div>
 
-          <div className={styles.stickyCartBar}>
-            <AddToCartControls 
-              product={{
-                id: product.id,
-                title: product.title,
-                price: product.premium_price,
-                imageUrl: product.image_url || 'https://images.unsplash.com/photo-1518843875459-f738682238a6?w=400&h=400&fit=crop',
-                vendorName: product.vendor_name
-              }} 
-            />
+          <div className={styles.stickyCartBar} style={{ display: 'flex', gap: 12, alignItems: 'stretch' }}>
+            <div style={{ flex: 1 }}>
+              <AddToCartControls 
+                product={{
+                  id: product.id,
+                  title: product.title,
+                  price: product.premium_price,
+                  imageUrl: product.image_url || 'https://images.unsplash.com/photo-1518843875459-f738682238a6?w=400&h=400&fit=crop',
+                  vendorName: product.vendor_name
+                }} 
+              />
+            </div>
+            <WishlistButton productId={product.id} productTitle={product.title} />
           </div>
 
           <div className={styles.stockAvailability}>
@@ -87,6 +106,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
       </div>
+
+      {/* ── Reviews Section ── */}
+      <ProductReviews productId={product.id} />
     </div>
   );
 }

@@ -159,7 +159,7 @@
 }
 
 .checkoutBtn:hover {
-  background: var(--brand-orange);
+  background: #111;
 }
 
 /* ── Login Wall (shown to guests) ── */
@@ -196,7 +196,7 @@
   margin-top: 0.75rem;
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--brand-orange);
+  color: #111;
   text-align: center;
 }
 
@@ -222,5 +222,75 @@
   }
   .summaryCard {
     position: static;
+  }
+}
+
+/* ── Mobile Only (phones) ── */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.5px;
+  }
+
+  .cartItem {
+    gap: 1rem;
+    padding: 1.25rem 0;
+  }
+
+  .itemImage {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .itemHeader h3 {
+    font-size: 0.95rem;
+  }
+
+  .vendor {
+    font-size: 0.78rem;
+    margin-bottom: 1rem;
+  }
+
+  .quantityControls {
+    gap: 1rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .quantityControls button {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+
+  .itemPrice {
+    font-size: 1.1rem;
+  }
+
+  .summaryCard {
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1.5px solid #e8e8e8;
+    background: #fff;
+  }
+
+  .summaryCard h2 {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .totalRow {
+    font-size: 1.15rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .checkoutBtn {
+    padding: 1.1rem;
+    font-size: 0.95rem;
+    border-radius: 12px;
   }
 }

@@ -26,7 +26,7 @@ export default function Footer() {
         <div className={styles.mainGrid}>
           <div className={styles.column}>
             <div className={styles.logo}>DAILYMARKET</div>
-            <p className={styles.tagline}>Premium marketplace logistics for the Ugandan economy. Simplified, Scaled, Delivered.</p>
+            <p className={styles.tagline}>Premium marketplace logistics for the South African economy. Simplified, Scaled, Delivered.</p>
           </div>
           
           <div className={styles.column}>
@@ -59,7 +59,7 @@ export default function Footer() {
         </div>
 
         <div className={styles.bottom}>
-          <p>&copy; {new Date().getFullYear()} DAILYMARKET. ALL RIGHTS RESERVED. 🇺🇬</p>
+          <p>&copy; {new Date().getFullYear()} DAILYMARKET. ALL RIGHTS RESERVED. 🇿🇦</p>
           <div className={styles.legal}>
             <Link href="/terms">TERMS</Link>
             <Link href="/privacy">PRIVACY</Link>

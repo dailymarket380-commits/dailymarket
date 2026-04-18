@@ -12,7 +12,7 @@ export default function AboutPage() {
       {/* Hero */}
       <section style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', color: '#fff', padding: '100px 20px', textAlign: 'center' }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
-          <div style={{ display: 'inline-block', background: 'rgba(249,115,22,0.15)', color: '#fb923c', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '30px', marginBottom: '24px', border: '1px solid rgba(249,115,22,0.3)' }}>Est. 2024 · South Africa</div>
+          <div style={{ display: 'inline-block', background: 'rgba(249,115,22,0.15)', color: '#fb923c', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '6px 16px', borderRadius: '30px', marginBottom: '24px', border: '1px solid rgba(0,0,0,0.3)' }}>Est. 2024 · South Africa</div>
           <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.1, marginBottom: '24px' }}>We Believe Everyone Deserves Premium.</h1>
           <p style={{ fontSize: '1.2rem', color: '#94a3b8', lineHeight: 1.7, maxWidth: 600, margin: '0 auto' }}>DailyMarket was born from a simple idea: make the highest-quality fresh produce and artisan goods accessible to every South African household.</p>
         </div>
@@ -39,7 +39,7 @@ export default function AboutPage() {
       <section style={{ background: '#fff7ed', borderTop: '1px solid #fed7aa', borderBottom: '1px solid #fed7aa', padding: '80px 20px', textAlign: 'center' }}>
         <h2 style={{ fontSize: '2rem', fontWeight: 900, color: '#9a3412', marginBottom: 16, letterSpacing: '-0.03em' }}>Ready to taste the difference?</h2>
         <p style={{ color: '#c2410c', marginBottom: 32, fontSize: '1.05rem' }}>Join thousands of South Africans who shop smarter with DailyMarket.</p>
-        <Link href="/" style={{ background: '#f97316', color: '#fff', padding: '14px 36px', borderRadius: 12, fontWeight: 800, fontSize: '1rem', textDecoration: 'none', display: 'inline-block', boxShadow: '0 4px 15px rgba(249,115,22,0.3)' }}>Shop Now →</Link>
+        <Link href="/" style={{ background: '#111111', color: '#fff', padding: '14px 36px', borderRadius: 12, fontWeight: 800, fontSize: '1rem', textDecoration: 'none', display: 'inline-block', boxShadow: '0 4px 15px rgba(0,0,0,0.3)' }}>Shop Now →</Link>
       </section>
     </main>
   );

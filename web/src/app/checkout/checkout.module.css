@@ -186,7 +186,7 @@
 
 /* Primary btn orange on hover */
 .primaryBtn:hover:not(:disabled) {
-  background: var(--brand-orange);
+  background: #111;
   transition: background 0.2s ease;
 }
 
@@ -303,5 +303,87 @@
   .checkoutLayout {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+}
+
+/* ── Mobile Only (phones) ── */
+@media (max-width: 768px) {
+  /* Stepper */
+  .stepper {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .step {
+    font-size: 0.7rem;
+  }
+
+  /* Form heading */
+  .form h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Stack First Name + Last Name vertically */
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* Inputs — bigger tap target */
+  .inputGroup {
+    margin-bottom: 1rem;
+  }
+  .inputGroup input,
+  .inputGroup textarea {
+    padding: 14px 16px;
+    font-size: 16px; /* prevents iOS auto-zoom on focus */
+    border-radius: 10px;
+  }
+  .inputGroup label {
+    font-size: 0.7rem;
+    margin-bottom: 6px;
+  }
+
+  /* Submit button */
+  .primaryBtn {
+    padding: 1.1rem;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    margin-top: 0.5rem;
+  }
+
+  /* Back button */
+  .backBtn {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  /* Payment methods */
+  .method {
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+  }
+
+  /* Order summary card on mobile */
+  .sidebar {
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1.5px solid #e8e8e8;
+    background: #fff;
+  }
+  .orderSummary h3 {
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+  }
+  .summaryItem img {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+  }
+  .summaryTitle {
+    font-size: 0.85rem;
+  }
+  .grandTotal {
+    font-size: 1.1rem;
   }
 }

@@ -65,7 +65,7 @@ export default function PrivacyPage() {
         <div style={{ marginTop: 60, padding: 32, background: '#f8fafc', borderRadius: 16, border: '1px solid #e2e8f0' }}>
           <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.7 }}>
             Privacy concerns? Email our Information Officer at{' '}
-            <a href="mailto:privacy@dailymarket.co.za" style={{ color: '#f97316', fontWeight: 700 }}>privacy@dailymarket.co.za</a>
+            <a href="mailto:privacy@dailymarket.co.za" style={{ color: '#111111', fontWeight: 700 }}>privacy@dailymarket.co.za</a>
           </p>
         </div>
       </div>
